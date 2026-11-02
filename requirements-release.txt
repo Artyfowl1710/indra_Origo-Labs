@@ -1,7 +1,7 @@
 # Windows x64 judge-preview runtime. Resolve and archive the exact lock during release build.
 openai==2.24.0
 certifi==2026.10.19
-python-dotenv==1.2.2
+python-dotenv==1.2.4
 fire==0.7.1
 httpx[socks]==0.28.1
 rich==14.3.3
