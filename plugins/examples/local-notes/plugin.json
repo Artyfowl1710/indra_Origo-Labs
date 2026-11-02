@@ -1,0 +1,26 @@
+{
+  "id": "local-notes",
+  "name": "Local Notes (example)",
+  "version": "1.0.0",
+  "description": "Example integration contract for a trusted local JSON service. No service is shipped or started by this manifest.",
+  "enabled": false,
+  "base_url": "http://127.0.0.1:9911",
+  "tools": [
+    {
+      "name": "search_notes",
+      "description": "Search a local note index for a short query.",
+      "method": "POST",
+      "read_only": true,
+      "endpoint": "/search",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "query": {"type": "string", "description": "Short note search query", "maxLength": 300},
+          "limit": {"type": "integer", "description": "Maximum results", "enum": [3, 5, 8]}
+        },
+        "required": ["query"],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

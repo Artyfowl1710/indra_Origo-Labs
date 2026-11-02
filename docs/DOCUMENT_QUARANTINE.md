@@ -1,0 +1,11 @@
+# Offline document quarantine
+
+Knowledge now scans extracted text before sending chunks to any embedding endpoint. The scanner runs locally, using bounded Unicode-normalized rules for instruction overrides, role spoofing, evidence-delimiter escapes, credential exfiltration and approval bypass. Matching documents are quarantined as a whole: even apparently harmless passages and neighbouring chunks from that source cannot enter keyword, semantic or fallback retrieval, chat context, or the agent's `knowledge_search` results.
+
+The source remains on disk. The redacted extracted copy remains in the local index for inspection and removal. Knowledge displays the quarantine status and rule IDs, and its searchable-passage count excludes those documents. Edit the original source and upload a corrected copy to replace the decision; there is no automatic “trust this instruction” bypass. Security examples and quoted attack instructions can also trigger these conservative rules.
+
+Existing collections are scanned before their next list, status or retrieval operation. A scanner version change triggers rescanning of stored text; old quarantined vectors are cleared. Decisions persist across restart. The desktop profile writes a signed `knowledge.quarantined` Audit event containing collection/document IDs, a source hash and rule IDs, without copying document text into the event.
+
+This is an initial defence layer. It is **not** a learned classifier, a comprehensive DLP system, a guarantee against prompt injection, or a guard over every tool result. A subsequent [content-trust guard](CONTENT_TRUST_GUARD.md) adds registry tool-output scanning and fresh human review after untrusted context. A trained classifier, mandatory filtering across every result path, vault canaries and outbound-call blocking remain open.
+
+Verification uses real SQLite indices and the authenticated desktop API, including Unicode obfuscation, adjacent-chunk leakage, dense and lexical retrieval, legacy-index migration, corrected-source replacement, profile context and signed Audit. The native renderer uploads isolated clean/poisoned fixtures and verifies the visible status and clean-only chat context. Local reports: `data/test-results/document-safety-*.log` and `document-safety-native-acceptance.json`. Fixture uploads do not modify the active user's library.

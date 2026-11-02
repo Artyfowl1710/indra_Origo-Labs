@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "files": 12763,
+  "bytes": 195342709,
+  "findings": [],
+  "scope": "source files and current handbook; private runtime excluded; synthetic key fixtures reviewed separately"
+}

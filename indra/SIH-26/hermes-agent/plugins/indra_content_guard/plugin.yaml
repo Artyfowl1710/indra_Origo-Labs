@@ -1,0 +1,5 @@
+name: indra_content_guard
+version: 1.0.0
+description: Offline tool-output screening and per-operation human review after untrusted context.
+author: Origo Labs
+kind: backend

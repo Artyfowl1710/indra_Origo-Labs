@@ -1,0 +1,15 @@
+name: aegisai
+label: AegisAI Workbench
+description: SIH26 sovereign AI workbench theme
+
+palette:
+  background: "#05091A"
+  midground: "#00E0C6"
+  warmGlow: "rgba(0, 224, 198, 0.22)"
+
+typography:
+  fontSans: "Inter, system-ui, sans-serif"
+  baseSize: "15px"
+
+layout:
+  radius: "10px"

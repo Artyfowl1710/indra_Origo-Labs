@@ -1,0 +1,9 @@
+{
+  "counts": {
+    "not_in_import_manifest": 471,
+    "unchanged": 11725,
+    "changed": 199
+  },
+  "scope": "Imported subtree only; compares working-file bytes before Git newline normalization",
+  "limitations": "The working SIH snapshot can differ from the public parent commit. Unlisted or changed files are not proof of event-period authorship."
+}

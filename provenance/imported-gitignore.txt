@@ -1,0 +1,321 @@
+# ==============================================================================
+# INDRA / SIH-26 Master Unified .gitignore
+# Consolidated root ignore rules covering root, SIH-26, Hermes-Agent,
+# backend, frontend, desktop, installer, and runtime environments.
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Models and Large Binaries (Heavy files)
+# ------------------------------------------------------------------------------
+*.gguf
+*.bin
+*.pt
+*.pth
+*.onnx
+*.safetensors
+*.zip
+*.tar.gz
+*.tgz
+
+# Model directories
+models/
+SIH-26/hermes-agent/backend/models/
+models-dev-upstream/
+
+# Engine Binaries & DLLs
+*.exe
+*.dll
+*.so
+*.dylib
+bin/*.dll
+bin/*.exe
+bin/qdrant-dist/
+bin/qdrant.zip
+
+# Whitelist required distributed binaries and licenses
+!bin/llama-swap
+!bin/LICENSE-LLVM-OpenMP
+!SIH-26/hermes-agent/backend/bin/llama-swap
+!SIH-26/hermes-agent/backend/bin/LICENSE-LLVM-OpenMP
+
+# ------------------------------------------------------------------------------
+# 2. Environment Variables, Secrets & Credentials
+# ------------------------------------------------------------------------------
+.env
+.env.*
+.op.env
+!.env.example
+hermes-user-api-key.txt
+share-codes.txt
+*.ppk
+*.pem
+privvy*
+certs/
+mcp-tokens/
+token.json
+credentials.json
+cli-config.yaml
+auth.json
+auth.lock
+
+# ------------------------------------------------------------------------------
+# 3. Python Virtual Environments, Bytecode & Build Artifacts
+# ------------------------------------------------------------------------------
+venv/
+venv.*/
+venv-*/
+.venv/
+.venv.*/
+env/
+/venv.old/
+/venv.stale.runtime-*/
+__pycache__/
+/_pycache/
+*.py[cod]
+*.pyc*
+*.egg-info/
+hermes_agent.egg-info/
+.pip-cache/
+.uv-cache/
+.pytest_cache/
+.pytest-cache/
+test_durations.json
+.ruff_cache/
+.mypy_cache/
+
+# ------------------------------------------------------------------------------
+# 4. Node, JavaScript, TypeScript & Package Manager Caches
+# ------------------------------------------------------------------------------
+node_modules/
+node_modules
+.npm/
+.yarn/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.photon-npm-error.log
+.docusaurus
+.cache-loader
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Desktop & shared tsc-emitted artifacts in src/
+SIH-26/hermes-agent/apps/desktop/src/**/*.js
+SIH-26/hermes-agent/apps/desktop/src/**/*.js.map
+SIH-26/hermes-agent/apps/desktop/src/**/*.d.ts
+SIH-26/hermes-agent/apps/shared/src/**/*.js
+SIH-26/hermes-agent/apps/shared/src/**/*.js.map
+SIH-26/hermes-agent/apps/shared/src/**/*.d.ts
+SIH-26/hermes-agent/ui-tui/src/*.js
+
+# Whitelist TypeScript source declarations & adopted ESM plugins
+!SIH-26/hermes-agent/apps/desktop/src/plugins/*/plugin.js
+!SIH-26/hermes-agent/apps/desktop/src/global.d.ts
+!SIH-26/hermes-agent/apps/desktop/src/vite-env.d.ts
+
+# ------------------------------------------------------------------------------
+# 5. Build & Distribution Outputs
+# ------------------------------------------------------------------------------
+dist/
+/dist/
+build/
+/build/
+.vite/
+dist-ssr/
+/dist-ssr/
+release/
+SIH-26/hermes-agent/apps/desktop/build/
+SIH-26/hermes-agent/apps/desktop/dist/
+SIH-26/hermes-agent/apps/desktop/release/
+SIH-26/hermes-agent/apps/desktop/.staging-*/
+SIH-26/hermes-agent/hermes_cli/web_dist/
+SIH-26/hermes-agent/hermes_cli/tui_dist/*
+.web_ui_build.lock
+web-ui-build-stamp.json
+
+# Tauri build artifacts (bootstrap installer)
+**/src-tauri/target/
+**/src-tauri/Cargo.lock
+**/src-tauri/gen/
+.tauri-note
+vite.config.d.ts
+vite.config.js
+
+# Language server & temporary directories
+tmp/
+lsp/
+
+
+# Website generated API indexes & artifacts
+website/static/api/skills-index.json
+website/static/api/skills.json
+website/static/api/skills-meta.json
+website/static/api/automation-blueprints-index.json
+SIH-26/hermes-agent/website/static/api/skills-index.json
+SIH-26/hermes-agent/website/static/api/skills.json
+SIH-26/hermes-agent/website/static/api/skills-meta.json
+SIH-26/hermes-agent/website/static/api/automation-blueprints-index.json
+SIH-26/hermes-agent/website/src/data/skills.json
+SIH-26/hermes-agent/website/src/data/skills-meta.json
+SIH-26/hermes-agent/website/static/llms.txt
+SIH-26/hermes-agent/website/static/llms-full.txt
+
+# Web assets synced at build time
+SIH-26/hermes-agent/web/public/fonts/
+SIH-26/hermes-agent/web/public/ds-assets/
+
+# ------------------------------------------------------------------------------
+# 6. Local INDRA & Hermes Runtime State, Databases & Locks
+# ------------------------------------------------------------------------------
+# Databases and SQLite journal/wal files
+*.db
+*.db-shm
+*.db-wal
+storage/
+.qdrant-initialized
+
+# Process, state & lock files
+*.lock
+*.pid
+*.heartbeat
+.install_id.lock
+.mcp-discovery.lock
+.backup.lock
+.hermes_history
+.hermes/
+.hermes-runtime/
+.indra-runtime/
+.hermes-bootstrap-complete
+.update-incomplete
+.update-incomplete.lock
+.bytecode-fingerprint
+.bytecode-fingerprint.tmp
+.install_method
+.lazy-refresh-incomplete
+.skills_prompt_snapshot.json
+.probe-home/
+
+# Runtime session state, logs & caches
+cache/
+.cache/
+logs/
+*.log
+log.txt
+sessions/
+terminal-sessions/
+spawn-trees/
+runtime/active_sessions.json
+interrupted_turns.json
+gateway-starts.log
+interrupt_debug.log
+llama_swap.err
+models_dev_cache.json
+models_dev_cache.etag
+ollama_cloud_models_cache.json
+provider_models_cache.json
+spawn-ledger.json
+.curator_ledger.jsonl
+.curator_state
+.usage.json
+
+# ------------------------------------------------------------------------------
+# 7. Sandbox, Testing & Media Outputs
+# ------------------------------------------------------------------------------
+.hermes-docker/
+compose.hermes.local.yml
+.hermes-sandbox/
+.hermes-sandbox-e2e*/
+act/
+.act-sandbox-agent.*
+.notebooklm-home/
+.notebooklm-cli-venv/
+.notebooklm-playwright/
+playwright-report/
+test-results/
+testlogs/
+*-snapshots/
+wandb/
+images/
+image_cache/
+pastes/
+temp_vision_images/
+memories/*.lock
+
+# ------------------------------------------------------------------------------
+# 8. Evals & Benchmark Results
+# ------------------------------------------------------------------------------
+SIH-26/hermes-agent/evals/**/results/*.jsonl
+SIH-26/hermes-agent/evals/core_tool_deferral/results/*
+!SIH-26/hermes-agent/evals/core_tool_deferral/results/SUMMARY.md
+SIH-26/hermes-agent/evals/readtool/results/*
+!SIH-26/hermes-agent/evals/readtool/results/SUMMARY.md
+environments/benchmarks/evals/
+
+# ------------------------------------------------------------------------------
+# 9. Generated Outputs & Local Vaults
+# ------------------------------------------------------------------------------
+output/
+outputs/
+MyVault/
+Obsidian Vault/
+extracted_PINN.txt
+generate_artifacts.py
+.curator_backups/
+.chart-data-*/
+.codex-ppt-build/
+presentation-work/
+export*
+source-data/*
+
+# Infographics generated for PR descriptions (embedded via URL, not repo)
+infographic/
+infographics/
+infograficos/
+infografico/
+
+# ------------------------------------------------------------------------------
+# 10. Editor, Tooling & Operating System Files
+# ------------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*.swo
+*~
+*.bak
+*.bak_*
+*.bak.*
+
+# Editor workspaces
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.codex/
+.cursor/
+.gemini/
+.zed/
+.mcp.json
+opencode.json
+config/mcporter.json
+
+# Nix
+.direnv/
+.nix-stamps/
+result
+
+# Locks and Runtime Heartbeats
+*.lock
+*.lock.*
+*.heartbeat
+*.pid
+SIH-26/state/
+SIH-26/runtime/

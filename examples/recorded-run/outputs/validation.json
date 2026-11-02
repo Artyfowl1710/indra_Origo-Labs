@@ -1,0 +1,14 @@
+{
+  "test_command": "python -m unittest discover -s tests -v",
+  "test_exit_code": 0,
+  "test_count": 12,
+  "baseline_observations": "Before fix: Ran 8 tests, 3 failures (exact_free_shipping shipping 39.00 vs 0.00, half_up subtotal 2.67 vs 2.68, discount_then_tax total 511.50 vs 472.50). After fix: 12 tests OK.",
+  "baseline_failures": 3,
+  "output_files": [
+    "outputs/release-review.md",
+    "outputs/test-results.txt",
+    "outputs/validation.json",
+    "outputs/quote-cases.csv",
+    "outputs/demo-handoff.json"
+  ]
+}

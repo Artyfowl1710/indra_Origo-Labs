@@ -1,0 +1,17 @@
+test_above_threshold (test_baseline.CheckoutAcceptance.test_above_threshold) ... ok
+test_discount_then_tax (test_baseline.CheckoutAcceptance.test_discount_then_tax) ... ok
+test_exact_free_shipping_threshold (test_baseline.CheckoutAcceptance.test_exact_free_shipping_threshold) ... ok
+test_half_up_line_rounding (test_baseline.CheckoutAcceptance.test_half_up_line_rounding) ... ok
+test_normal_order (test_baseline.CheckoutAcceptance.test_normal_order) ... ok
+test_reject_invalid_discount (test_baseline.CheckoutAcceptance.test_reject_invalid_discount) ... ok
+test_reject_negative_price (test_baseline.CheckoutAcceptance.test_reject_negative_price) ... ok
+test_reject_zero_quantity (test_baseline.CheckoutAcceptance.test_reject_zero_quantity) ... ok
+test_discount_does_not_affect_shipping (test_regression.TestRegression.test_discount_does_not_affect_shipping) ... ok
+test_exact_500_free_shipping (test_regression.TestRegression.test_exact_500_free_shipping) ... ok
+test_fractional_cent_half_up (test_regression.TestRegression.test_fractional_cent_half_up) ... ok
+test_shipping_boundary_just_below (test_regression.TestRegression.test_shipping_boundary_just_below) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.001s
+
+OK

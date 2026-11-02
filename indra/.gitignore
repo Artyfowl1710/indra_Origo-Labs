@@ -1,0 +1,3 @@
+# The public repository root owns runtime exclusions.
+node_modules/
+__pycache__/

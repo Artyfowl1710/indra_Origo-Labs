@@ -1,0 +1,8 @@
+{
+  "name": "indra-origo",
+  "productName": "Indra",
+  "author": "Origo Labs",
+  "version": "1.8.0-rc.1",
+  "main": "entry.cjs",
+  "private": true
+}

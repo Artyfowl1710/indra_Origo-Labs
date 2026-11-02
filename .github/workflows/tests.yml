@@ -1,0 +1,45 @@
+name: Product checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  python-tests:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: requirements-release.lock.txt
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '22'
+      - name: Isolate generated test state
+        run: '"INDRA_DATA_DIR=$env:RUNNER_TEMP\indra-regression-state" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append'
+      - name: Install pinned dependencies
+        run: python -m pip install -r requirements-release.lock.txt
+      - name: Compile Python
+        run: python -m compileall -q app tests scripts
+      - name: Run regression tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate skills and plugins
+        run: python scripts/validate_extensions.py
+      - name: Desktop isolation and JavaScript checks
+        run: |
+          node --test origo-desktop/product-paths.test.cjs
+          node --check app/static/app.js
+      - name: Check public files and documentation
+        run: |
+          python scripts/check_public_package.py
+          python scripts/build_handbook.py
+      - name: Reproduce the completed example
+        working-directory: examples/recorded-run
+        run: python verify_demo.py

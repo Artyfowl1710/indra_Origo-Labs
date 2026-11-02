@@ -1,0 +1,17 @@
+healthCheckTimeout: 180
+models:
+  gemma-2-2b-it:
+    cmdStop: 'C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -Command "Stop-Process -Id ${PID} -Force -ErrorAction SilentlyContinue"'
+    cmd: >-
+      "C:/Users/khatr/OneDrive/Desktop/SIH-26-main/SIH-26/hermes-agent/backend/bin/llama-server.exe" --host 127.0.0.1 --port ${PORT} --model "C:/Users/khatr/OneDrive/Desktop/SIH-26-main/SIH-26/hermes-agent/backend/models/gemma-2-2b-it-Q4_K_M.gguf" --alias gemma-2-2b-it --n-gpu-layers 99 --ctx-size 32768 --parallel 1 --batch-size 256 --ubatch-size 128 --threads 8 --flash-attn on --cache-type-k q4_0 --cache-type-v q4_0 --jinja --reasoning off --predict 2048
+    ttl: 300
+  qwen2-vl-ocr-2b-instruct:
+    cmdStop: 'C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -Command "Stop-Process -Id ${PID} -Force -ErrorAction SilentlyContinue"'
+    cmd: >-
+      "C:/Users/khatr/OneDrive/Desktop/SIH-26-main/SIH-26/hermes-agent/backend/bin/llama-server.exe" --host 127.0.0.1 --port ${PORT} --model "C:/Users/khatr/OneDrive/Desktop/SIH-26-main/SIH-26/hermes-agent/backend/models/Qwen2-VL-OCR-2B-Instruct.Q4_K_M.gguf" --alias qwen2-vl-ocr-2b-instruct --n-gpu-layers 99 --ctx-size 8192 --parallel 1 --batch-size 128 --ubatch-size 64 --threads 8 --flash-attn on --mmproj "C:/Users/khatr/OneDrive/Desktop/SIH-26-main/SIH-26/hermes-agent/backend/models/mmproj-Qwen2-VL-2B-Instruct-f16.gguf" --chat-template chatml --image-min-tokens 1024 --reasoning off --predict 1024
+    ttl: 300
+  qwen3.5-4b:
+    cmdStop: 'C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -Command "Stop-Process -Id ${PID} -Force -ErrorAction SilentlyContinue"'
+    cmd: >-
+      "C:/Users/khatr/OneDrive/Desktop/SIH-26-main/SIH-26/hermes-agent/backend/bin/llama-server.exe" --host 127.0.0.1 --port ${PORT} --model "C:/Users/khatr/OneDrive/Desktop/SIH-26-main/SIH-26/hermes-agent/backend/models/Qwen3.5-4B-Q4_K_M.gguf" --alias qwen3.5-4b --n-gpu-layers 99 --ctx-size 32768 --parallel 1 --batch-size 256 --ubatch-size 128 --threads 8 --flash-attn on --cache-type-k q4_0 --cache-type-v q4_0 --jinja --reasoning-budget 0 --reasoning off --predict 4096
+    ttl: 300

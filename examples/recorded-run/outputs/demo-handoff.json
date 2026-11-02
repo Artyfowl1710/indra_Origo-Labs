@@ -1,0 +1,22 @@
+{
+  "project": "Atlas Checkout",
+  "summary": "Fixed Decimal half-up and >=500 shipping; 12 tests OK; 3 sample cases match.",
+  "changed_files": [
+    "checkout.py",
+    "tests/test_regression.py"
+  ],
+  "test_exit_code": 0,
+  "test_count": 12,
+  "verification_command": "python verify_demo.py",
+  "outputs": [
+    "outputs/release-review.md",
+    "outputs/test-results.txt",
+    "outputs/validation.json",
+    "outputs/quote-cases.csv",
+    "outputs/demo-handoff.json"
+  ],
+  "remaining_limitations": "Fictional rules only; no deployment or phone verification; local evidence only.",
+  "next_safe_action": "Run python verify_demo.py to confirm 0 exit before sharing.",
+  "model": "meta-models/muse-spark-open-1026",
+  "provider": "baseten"
+}

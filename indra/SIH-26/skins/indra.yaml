@@ -1,0 +1,77 @@
+name: indra
+description: INDRA sovereign intelligence terminal
+
+colors:
+  banner_border: "#E5E7EB"
+  banner_title: "#FFFFFF"
+  banner_accent: "#FF3000"
+  banner_dim: "#9CA3AF"
+  banner_text: "#FFFFFF"
+
+  ui_accent: "#FF3000"
+  ui_label: "#FFFFFF"
+  ui_ok: "#4ADE80"
+  ui_error: "#FF3000"
+  ui_warn: "#FF3000"
+
+  prompt: "#FFFFFF"
+  input_rule: "#9CA3AF"
+  response_border: "#E5E7EB"
+  response_text: "#FFFFFF"
+
+  session_label: "#FFFFFF"
+  session_border: "#9CA3AF"
+  status_bar_bg: "#282C34"
+  status_bar_text: "#FFFFFF"
+  voice_status_bg: "#282C34"
+
+  selection_bg: "#374151"
+  completion_menu_bg: "#20252D"
+  completion_menu_current_bg: "#FF3000"
+  completion_menu_meta_bg: "#20252D"
+  completion_menu_meta_current_bg: "#FF3000"
+
+spinner:
+  waiting_faces:
+    - "[ ]"
+    - "[■]"
+    - "[□]"
+
+  thinking_faces:
+    - "[·]"
+    - "[▪]"
+    - "[■]"
+
+  thinking_verbs:
+    - "ROUTING"
+    - "ANALYZING"
+    - "VERIFYING"
+    - "EXECUTING"
+
+branding:
+  agent_name: "INDRA"
+  welcome: "INDRA — Intelligence Within Your Perimeter."
+  goodbye: "INDRA SESSION CLOSED."
+  response_label: " INDRA / RESPONSE "
+  prompt_symbol: ">"
+  help_header: "INDRA COMMANDS"
+
+tool_prefix: "│"
+
+tool_emojis:
+  terminal: ">"
+  read_file: "□"
+  search_files: "⌕"
+  code_execution: "◆"
+  vision_analyze: "◉"
+
+banner_logo: |
+  [bold #FFFFFF]
+  ██╗███╗   ██╗██████╗ ██████╗  █████╗
+  ██║████╗  ██║██╔══██╗██╔══██╗██╔══██╗
+  ██║██╔██╗ ██║██║  ██║██████╔╝███████║
+  ██║██║╚██╗██║██║  ██║██╔══██╗██╔══██║
+  ██║██║ ╚████║██████╔╝██║  ██║██║  ██║
+  ╚═╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+  [/]
+  [#FF3000]SOVEREIGN INTELLIGENCE WORKBENCH[/]

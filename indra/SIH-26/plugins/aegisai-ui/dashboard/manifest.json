@@ -1,0 +1,13 @@
+{
+  "name": "aegisai-ui",
+  "label": "AegisAI Workbench",
+  "description": "AegisAI sovereign workbench",
+  "icon": "Shield",
+  "version": "1.0.0",
+  "tab": {
+    "path": "/aegisai",
+    "position": "end",
+    "override": "/"
+  },
+  "entry": "dist/index.js"
+}

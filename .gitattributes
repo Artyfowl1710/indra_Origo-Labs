@@ -1,0 +1,18 @@
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+# Protected demo inputs are byte-hashed. Preserve their original bytes on all OSes.
+examples/** -text
+*.png binary
+*.jpg binary
+*.webp binary
+*.mp4 binary
+*.pdf binary
+*.pptx binary
+*.docx binary

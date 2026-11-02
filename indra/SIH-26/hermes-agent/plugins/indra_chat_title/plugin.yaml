@@ -1,0 +1,7 @@
+name: indra_chat_title
+version: 1.0.0
+description: Rename only the model's current local chat with checked writes and live title updates.
+author: Origo Labs
+kind: backend
+provides_tools:
+  - rename_current_chat

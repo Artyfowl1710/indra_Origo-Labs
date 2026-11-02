@@ -1,0 +1,21 @@
+{
+  "1": {
+    "class_type": "ACEStepSampler",
+    "inputs": {
+      "model": ["2", 0],
+      "prompt": "__PROMPT__",
+      "seed": "__SEED__",
+      "steps": 60,
+      "cfg": 7.0,
+      "duration_seconds": 30
+    }
+  },
+  "2": {
+    "class_type": "ACEStepModelLoader",
+    "inputs": { "model_name": "__CHECKPOINT__" }
+  },
+  "3": {
+    "class_type": "ACEStepSave",
+    "inputs": { "audio": ["1", 0], "filename_prefix": "workbench_audio" }
+  }
+}

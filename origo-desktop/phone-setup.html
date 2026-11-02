@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Indra Origo · Phone pairing</title><link rel="stylesheet" href="phone-setup.css"></head>
+<body><main>
+<div class="eyebrow">INDRA ORIGO / YOUR DEVICES</div>
+<h1>Your workspace.<br><span>Within reach.</span></h1>
+<p>Connect Origo Remote on your phone through your private Tailscale network. Models and workspace tools keep running on this PC.</p>
+<div class="status" id="share-status" role="status">Checking phone sharing…</div>
+<form id="pairing-form">
+<label for="endpoint">This PC's Tailscale HTTPS address</label>
+<input id="endpoint" type="url" placeholder="https://your-pc.your-tailnet.ts.net" maxlength="300" required autocomplete="off">
+<small>Install Tailscale on both devices, sign into your private network, and enable HTTPS for this PC. Public internet sharing is not used.</small>
+<div class="columns"><div><label for="username">Workstation username</label><input id="username" value="origo" maxlength="64" pattern="[A-Za-z0-9_.-]+" autocomplete="username" required></div>
+<div><label for="port">Local pairing port</label><input id="port" type="number" value="8766" min="1024" max="65535" required></div></div>
+<label for="password">Set a workstation password</label>
+<input id="password" type="password" minlength="12" maxlength="256" autocomplete="new-password" required>
+<small>At least 12 characters. Only a password hash is saved. Saving changes signs out existing phone sessions after restart.</small>
+<button id="save" type="submit">Save and restart Origo <span aria-hidden="true">↗</span></button>
+<button id="disable" type="button" class="secondary" hidden>Stop phone sharing and restart</button>
+</form>
+<div id="message" role="status" aria-live="polite"></div>
+<div class="note"><strong>On your phone</strong><br>Open Origo Remote 1.1.0, paste the address above, then sign in with this username and password. Sharing runs while Origo is open. Workstation sign-in remains enabled when sharing is stopped.</div>
+</main><script src="phone-setup.js"></script></body></html>

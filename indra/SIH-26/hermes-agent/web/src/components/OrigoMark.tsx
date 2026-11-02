@@ -1,0 +1,1 @@
+export function OrigoMark(){return <svg viewBox="0 0 64 64" role="img" aria-label="Origo Labs" className="origo-labs-mark"><circle cx="32" cy="32" r="28"/><circle cx="32" cy="32" r="23"/><path d="M32 11 49 23 43 44 21 44 15 23Z M32 11 32 53 M15 23 43 44 M49 23 21 44 M15 23 49 23 M21 44 32 53 43 44"/><circle cx="32" cy="32" r="6"/></svg>;}

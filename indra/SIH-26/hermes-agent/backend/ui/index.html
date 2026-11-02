@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workbench Status</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #0f1117; color: #e2e8f0; margin: 0; padding: 24px; }
+  h1 { font-size: 1.4rem; margin-bottom: 1.5rem; color: #7dd3fc; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  .card { background: #1e2130; border-radius: 8px; padding: 16px; }
+  .card h2 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin: 0 0 12px; }
+  .status-ok { color: #4ade80; }
+  .status-degraded { color: #f87171; }
+  .gpu-bar { background: #334155; border-radius: 4px; height: 8px; margin: 4px 0 8px; }
+  .gpu-bar-fill { background: #38bdf8; border-radius: 4px; height: 8px; transition: width 0.4s; }
+  .model-row { display: flex; justify-content: space-between; align-items: center;
+               padding: 6px 0; border-bottom: 1px solid #2d3748; font-size: 0.875rem; }
+  .model-row:last-child { border-bottom: none; }
+  .badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 9999px; font-weight: 600; }
+  .badge-idle { background: #1e3a5f; color: #7dd3fc; }
+  .badge-busy { background: #3b1f1f; color: #f87171; }
+  .badge-cold { background: #1f2937; color: #6b7280; }
+  .badge-loading { background: #2d2a1f; color: #fbbf24; }
+  .badge-unloading { background: #3b2d1f; color: #fb923c; }
+  small { color: #64748b; font-size: 0.75rem; }
+</style>
+</head>
+<body>
+<h1>⚡ AI Workbench</h1>
+<div class="grid">
+  <div class="card">
+    <h2>Server Status</h2>
+    <div id="status-text">Loading…</div>
+    <small id="last-updated"></small>
+  </div>
+  <div class="card">
+    <h2>GPU Memory</h2>
+    <div id="gpu-info">Loading…</div>
+  </div>
+  <div class="card" style="grid-column: 1 / -1;">
+    <h2>Models</h2>
+    <div id="models-list">Loading…</div>
+  </div>
+</div>
+
+<script>
+const API = '';  // same origin
+let apiKey = localStorage.getItem('wb_api_key') || prompt('Enter API key:');
+if (apiKey) localStorage.setItem('wb_api_key', apiKey);
+
+let headers = { 'Authorization': `Bearer ${apiKey}` };
+
+async function fetchJSON(url) {
+  const r = await fetch(url, { headers });
+  if (r.status === 401) {
+    localStorage.removeItem('wb_api_key');
+    apiKey = prompt('API key rejected (401). Enter a valid API key:');
+    if (apiKey) {
+      localStorage.setItem('wb_api_key', apiKey);
+      headers['Authorization'] = `Bearer ${apiKey}`;
+      const retry = await fetch(url, { headers });
+      if (!retry.ok) throw new Error(`${retry.status} ${retry.statusText}`);
+      return retry.json();
+    }
+  }
+  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+  return r.json();
+}
+
+function badge(status) {
+  return `<span class="badge badge-${status}">${status}</span>`;
+}
+
+async function refresh() {
+  try {
+    const [health, catalog] = await Promise.all([
+      fetchJSON('/v1/health'),
+      fetchJSON('/v1/models'),
+    ]);
+    const models = catalog.data;
+
+    // Status
+    const cls = health.status === 'ok' ? 'status-ok' : 'status-degraded';
+    const activeCount = models.filter(m => m.status === 'busy').length;
+    document.getElementById('status-text').innerHTML =
+      `<span class="${cls}" style="font-size:1.1rem;font-weight:600;">${health.status.toUpperCase()}</span>
+       <div style="margin-top:8px;font-size:0.875rem;">Active sessions: ${activeCount}</div>`;
+
+    // GPU
+    const gpuEl = document.getElementById('gpu-info');
+    if (!health.gpu || health.gpu.length === 0) {
+      gpuEl.innerHTML = '<small>No GPU detected</small>';
+    } else {
+      gpuEl.innerHTML = health.gpu.map(g => {
+        const pct = Math.round((g.used_mb / g.total_mb) * 100);
+        return `<div style="margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;font-size:0.8rem;">
+            <span>GPU ${g.id}</span><span>${g.used_mb} / ${g.total_mb} MB (${pct}%)</span>
+          </div>
+          <div class="gpu-bar"><div class="gpu-bar-fill" style="width:${pct}%"></div></div>
+        </div>`;
+      }).join('');
+    }
+
+    // Models
+    const modelsEl = document.getElementById('models-list');
+    if (!models.length) {
+      modelsEl.innerHTML = '<small>No models registered</small>';
+    } else {
+      modelsEl.innerHTML = models.map(m =>
+        `<div class="model-row">
+          <div>
+            <div style="font-weight:500;">${m.id}</div>
+            <small>${m.backend} · ${m.type} · ${(m.task_tags||[]).join(', ')}</small>
+          </div>
+          <div style="text-align:right;">
+            ${badge(m.status)}
+            ${m.vram_mb ? `<div style="font-size:0.7rem;color:#64748b;margin-top:2px;">${m.vram_mb} MB</div>` : ''}
+          </div>
+        </div>`
+      ).join('');
+    }
+
+    document.getElementById('last-updated').textContent =
+      `Last updated: ${new Date().toLocaleTimeString()}`;
+  } catch (e) {
+    document.getElementById('status-text').innerHTML =
+      `<span class="status-degraded">Unreachable: ${e.message}</span>`;
+  }
+}
+
+refresh();
+setInterval(refresh, 5000);
+</script>
+</body>
+</html>

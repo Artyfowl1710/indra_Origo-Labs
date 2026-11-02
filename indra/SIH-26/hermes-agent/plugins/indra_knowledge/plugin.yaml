@@ -1,0 +1,7 @@
+name: indra_knowledge
+version: 1.0.0
+description: Read-only search of the current profile's offline Knowledge and granted projects.
+author: Origo Labs
+kind: backend
+provides_tools:
+  - knowledge_search

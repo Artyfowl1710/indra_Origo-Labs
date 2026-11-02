@@ -1,0 +1,45 @@
+import {useCallback,useEffect,useRef,useState} from "react";
+import {createPortal} from "react-dom";
+import {Flag,Pause,Play,RefreshCw,X} from "lucide-react";
+import type {GatewayClient} from "@/lib/gatewayClient";
+import {useModalBehavior} from "@/hooks/useModalBehavior";
+
+type Gate={command:string;timeout_seconds:number;max_retries:number;last_exit_code?:number|null;last_output_tail?:string;last_checked_at?:number;attempts?:number};
+type Goal={goal:string;status:string;max_turns:number;turns_used:number;created_at:number;contract:Record<string,string>;gates:Gate[];last_reason?:string;paused_reason?:string};
+type Snapshot={state:Goal|null;running:boolean;session_id:string;cwd:string;execution_backend:string};
+export function ProjectGoalPanel({gateway,session,active,onControl}:{gateway:GatewayClient|null;session:string;active:boolean;onControl:(command:string,session:string)=>Promise<void>}){
+ const [snapshot,setSnapshot]=useState<Snapshot>(),[editing,setEditing]=useState(false),[working,setWorking]=useState(false),[error,setError]=useState("");
+ const [objective,setObjective]=useState(""),[verification,setVerification]=useState(""),[boundaries,setBoundaries]=useState(""),[constraints,setConstraints]=useState(""),[stop,setStop]=useState(""),[turns,setTurns]=useState(20),[gates,setGates]=useState<Gate[]>([]);
+ const revision=useRef<number|undefined>(undefined),context=useRef(session);context.current=session;
+ const close=useCallback(()=>setEditing(false),[]),modal=useModalBehavior({open:editing,onClose:close});
+ const refresh=useCallback(async()=>{if(!gateway||!session)return;const result=await gateway.request<Snapshot>("goal.get",{session_id:session});if(context.current===session)setSnapshot(result);},[gateway,session]);
+ useEffect(()=>{setSnapshot(undefined);setEditing(false);setError("");if(!gateway||!session||!active)return;let live=true,busy=false;
+  const poll=async()=>{if(busy)return;busy=true;try{const value=await gateway.request<Snapshot>("goal.get",{session_id:session});if(live)setSnapshot(value);}catch(e){if(live)setError(String(e));}finally{busy=false;}};
+  void poll();const timer=setInterval(()=>void poll(),2500);return()=>{live=false;clearInterval(timer);};
+ },[gateway,session,active]);
+ useEffect(()=>{if(editing)requestAnimationFrame(()=>modal.current?.querySelector<HTMLTextAreaElement>("textarea")?.focus());},[editing,modal]);
+ function edit(){const goal=snapshot?.state;revision.current=goal?.created_at;setObjective(goal?.goal??"");setVerification(goal?.contract.verification??"");setBoundaries(goal?.contract.boundaries??"");setConstraints(goal?.contract.constraints??"");setStop(goal?.contract.stop_when??"");setTurns(goal?.max_turns??20);setGates((goal?.gates??[]).map(g=>({...g})));setError("");setEditing(true);}
+ async function save(){if(!gateway||working)return;setWorking(true);setError("");try{const result=await gateway.request<Snapshot>("goal.configure",{session_id:session,objective,max_turns:turns,contract:{verification,boundaries,constraints,stop_when:stop},gates:gates.map(({command,timeout_seconds,max_retries})=>({command,timeout_seconds,max_retries})),expected_created_at:revision.current});if(context.current===session){setSnapshot(result);setEditing(false);window.dispatchEvent(new Event("indra:conversation-recorded"));}}catch(e){setError(String(e));}finally{setWorking(false);}}
+ async function control(command:string){setWorking(true);setError("");try{await onControl(command,session);await refresh();}catch(e){setError(String(e));}finally{setWorking(false);}}
+ const goal=snapshot?.state;
+ return <section className="indra-goal-panel" aria-label="Project goal">
+  <div className="indra-panel-title"><strong><Flag size={15}/> Project goal</strong><button type="button" aria-label="Refresh goal" disabled={!gateway||working} onClick={()=>void refresh().catch(e=>setError(String(e)))}><RefreshCw size={14}/></button></div>
+  {goal?<><p className="indra-goal-objective">{goal.goal}</p><div className="indra-goal-progress"><span>{goal.status}</span><span>{goal.turns_used}/{goal.max_turns} turns</span></div><progress aria-label="Goal turn budget" value={goal.turns_used} max={goal.max_turns}/>{(goal.last_reason||goal.paused_reason)&&<p>{goal.last_reason||goal.paused_reason}</p>}
+   {!!goal.gates.length&&<details className="indra-goal-evidence"><summary>Quality checks · {goal.gates.filter(g=>g.last_exit_code===0).length}/{goal.gates.length} passed</summary>{goal.gates.map((gate,i)=><article key={i}><code>{gate.command}</code><p>{gate.last_exit_code==null?"Not run":`Exit ${gate.last_exit_code} · ${gate.attempts??0} failed attempts`}</p>{!!gate.last_checked_at&&<p>Checked {new Date(gate.last_checked_at*1000).toLocaleString()}</p>}{gate.last_output_tail&&<pre>{gate.last_output_tail}</pre>}</article>)}</details>}
+   <div className="indra-goal-actions">{goal.status==="active"?<button type="button" disabled={working} onClick={()=>void control("/goal pause")}><Pause size={13}/>Pause</button>:goal.status!=="done"&&<button type="button" disabled={working||snapshot?.running} onClick={()=>void control("/goal resume")}><Play size={13}/>Start goal</button>}<button type="button" disabled={working||snapshot?.running} onClick={edit}>Edit goal</button></div>
+  </>:<><p>Define an outcome and how to prove it. Indra continues within your limits and tool approvals.</p><button type="button" disabled={!snapshot||working||snapshot.running} onClick={edit}>Set project goal</button></>}
+  {error&&<p role="alert">{error}</p>}
+  {editing&&createPortal(<div className="indra-goal-dialog" ref={modal} role="dialog" aria-modal="true" aria-labelledby="indra-goal-title" onKeyDown={e=>{if(e.key!=="Tab")return;const nodes=Array.from(modal.current?.querySelectorAll<HTMLElement>('button:not(:disabled),input,textarea,select')??[]);if(e.shiftKey&&document.activeElement===nodes[0]){e.preventDefault();nodes.at(-1)?.focus();}else if(!e.shiftKey&&document.activeElement===nodes.at(-1)){e.preventDefault();nodes[0]?.focus();}}}><form onSubmit={e=>{e.preventDefault();void save();}}>
+   <header><div><small>INDRA · ORIGO LABS</small><h2 id="indra-goal-title">Define the outcome.</h2></div><button type="button" aria-label="Close goal editor" onClick={close}><X size={20}/></button></header>
+   <p>Saving creates a paused goal. Review its checks, then choose Start goal. Existing tool approvals apply to every check.</p>
+   <label>What should Indra finish?<textarea required maxLength={12000} value={objective} onChange={e=>setObjective(e.target.value)} aria-label="Goal objective" placeholder="Build a working project, test it and show the results."/></label>
+   <label>Completion evidence<textarea maxLength={8000} value={verification} onChange={e=>setVerification(e.target.value)} aria-label="Goal verification" placeholder="Which tests, outputs or measurements prove it is finished?"/></label>
+   <div className="indra-goal-form-grid"><label>Scope / allowed project<textarea maxLength={8000} value={boundaries} onChange={e=>setBoundaries(e.target.value)} placeholder="Work only in the selected project."/></label><label>Preserve / constraints<textarea maxLength={8000} value={constraints} onChange={e=>setConstraints(e.target.value)}/></label></div>
+   <label>Stop and ask when<textarea maxLength={8000} value={stop} onChange={e=>setStop(e.target.value)} placeholder="A deployment, paid service or decision needs my review."/></label>
+   <label>Maximum agent turns<input type="number" min={1} max={200} required value={turns} onChange={e=>setTurns(Number(e.target.value))}/></label>
+   <section><div className="indra-panel-title"><h3>Quality checks</h3><button type="button" disabled={gates.length>=12} onClick={()=>setGates(rows=>[...rows,{command:"",timeout_seconds:120,max_retries:2}])}>Add check</button></div><p>Commands run in the configured {snapshot?.execution_backend??"selected"} environment after each completed agent turn. A failed check prevents completion.</p>
+    {gates.map((gate,i)=><fieldset key={i}><label>Command<input required maxLength={2000} aria-label={`Quality check ${i+1}`} value={gate.command} onChange={e=>setGates(rows=>rows.map((g,n)=>n===i?{...g,command:e.target.value}:g))} placeholder="python -m pytest -q"/></label><label>Timeout (seconds)<input required type="number" min={1} max={300} value={gate.timeout_seconds} onChange={e=>setGates(rows=>rows.map((g,n)=>n===i?{...g,timeout_seconds:Number(e.target.value)}:g))}/></label><label>Retries<input required type="number" min={0} max={5} value={gate.max_retries} onChange={e=>setGates(rows=>rows.map((g,n)=>n===i?{...g,max_retries:Number(e.target.value)}:g))}/></label><button type="button" aria-label={`Remove check ${i+1}`} onClick={()=>setGates(rows=>rows.filter((_,n)=>n!==i))}><X size={15}/></button></fieldset>)}
+   </section>{error&&<p role="alert">{error}</p>}<footer><span>Saved locally with this chat.</span><button type="submit" disabled={working}>{working?"Saving…":"Save goal"}</button></footer>
+  </form></div>,document.body)}
+ </section>;
+}

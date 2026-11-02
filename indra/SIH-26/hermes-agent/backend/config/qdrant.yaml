@@ -1,0 +1,6 @@
+storage:
+  storage_path: ./storage
+
+service:
+  host: 127.0.0.1
+  http_port: 6333

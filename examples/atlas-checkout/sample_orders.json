@@ -1,0 +1,5 @@
+[
+  {"id":"exact_free_shipping","lines":[{"unit_price":"199.90","quantity":2},{"unit_price":"100.20","quantity":1}],"discount_percent":0,"expected":{"subtotal":"500.00","discount":"0.00","shipping":"0.00","tax":"25.00","total":"525.00"}},
+  {"id":"half_up_line_rounding","lines":[{"unit_price":"2.675","quantity":1}],"discount_percent":0,"expected":{"subtotal":"2.68","discount":"0.00","shipping":"39.00","tax":"0.13","total":"41.81"}},
+  {"id":"discount_then_tax","lines":[{"unit_price":"250.00","quantity":2}],"discount_percent":10,"expected":{"subtotal":"500.00","discount":"50.00","shipping":"0.00","tax":"22.50","total":"472.50"}}
+]

@@ -1,0 +1,1 @@
+Xenova/all-MiniLM-L6-v2 ONNX conversion of sentence-transformers/all-MiniLM-L6-v2. Upstream model card labels it Apache-2.0. Source: https://huggingface.co/Xenova/all-MiniLM-L6-v2 . Revision and asset SHA-256 values are in packaging/minilm-manifest.json. Model weights are unmodified, not trained by Origo Labs.

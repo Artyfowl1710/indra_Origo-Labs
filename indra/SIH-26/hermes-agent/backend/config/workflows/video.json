@@ -1,0 +1,24 @@
+{
+  "1": {
+    "class_type": "WanVideoSampler",
+    "inputs": {
+      "model": ["2", 0],
+      "positive_prompt": "__PROMPT__",
+      "negative_prompt": "blurry, low quality",
+      "seed": "__SEED__",
+      "steps": 30,
+      "cfg": 6.0,
+      "num_frames": 81,
+      "width": 832,
+      "height": 480
+    }
+  },
+  "2": {
+    "class_type": "WanVideoModelLoader",
+    "inputs": { "model_name": "__CHECKPOINT__" }
+  },
+  "3": {
+    "class_type": "WanVideoSave",
+    "inputs": { "video": ["1", 0], "filename_prefix": "workbench_vid", "fps": 16 }
+  }
+}

@@ -1,0 +1,384 @@
+{
+  "ok": true,
+  "version": "1.8.0-rc.1",
+  "date": "2026-11-02",
+  "scope": "Prepared public source and Windows x64 candidate. Local checks on the development PC, not independent external certification.",
+  "checks": {
+    "public_source_scan": {
+      "ok": true,
+      "files": 12763,
+      "findings": 0,
+      "synthetic_test_vectors": "narrow path/hash exceptions reviewed in synthetic-secret-fixtures.json"
+    },
+    "current_handbook_links": {
+      "ok": true,
+      "pages": 17
+    },
+    "python_compilation": {
+      "ok": true,
+      "scope": "app, scripts, tests and packaging"
+    },
+    "product_regressions_developer_runtime": {
+      "run": 312,
+      "skipped": 2,
+      "failures": 0
+    },
+    "product_regressions_public_source_bundled_runtime": {
+      "run": 310,
+      "skipped": 3,
+      "failures": 0,
+      "skip_reasons": [
+        "Two Windows symlink-permission checks",
+        "Source checkout intentionally excludes embedding weights; bundled retrieval is checked separately"
+      ]
+    },
+    "focused_imported_backend": {
+      "passed": 29,
+      "warnings": 2,
+      "scope": [
+        "identity",
+        "knowledge tool",
+        "content guard",
+        "workspace API",
+        "inference connection"
+      ]
+    },
+    "desktop_path_tests": {
+      "passed": 3
+    },
+    "javascript_syntax_and_extension_validation": {
+      "ok": true
+    },
+    "completed_example": {
+      "tests": 12,
+      "verifier_pass": true,
+      "protected_inputs_match_git_index": true,
+      "bundled_python_cli_replay_pass": true
+    },
+    "bundled_offline_retrieval": {
+      "passed": 1,
+      "http_forbidden_during_test": true,
+      "embedding_dimensions": 384
+    },
+    "portable_desktop": {
+      "ok": true,
+      "packaged": true,
+      "api_statuses": [
+        {
+          "url": "/api/status",
+          "status": 200,
+          "problem": null
+        },
+        {
+          "url": "/api/sessions?limit=2",
+          "status": 200,
+          "problem": null
+        },
+        {
+          "url": "/api/model/info",
+          "status": 200,
+          "problem": null
+        }
+      ],
+      "tool_python_bundled": true,
+      "project_imports_work": true,
+      "observed_startup_ms": {
+        "initialWindowMs": 327,
+        "workspaceReadyMs": 9219
+      }
+    },
+    "installed_desktop": {
+      "installer_exit": 0,
+      "ok": true,
+      "api_statuses": [
+        {
+          "url": "/api/status",
+          "status": 200,
+          "problem": null
+        },
+        {
+          "url": "/api/sessions?limit=2",
+          "status": 200,
+          "problem": null
+        },
+        {
+          "url": "/api/model/info",
+          "status": 200,
+          "problem": null
+        }
+      ],
+      "tool_python_bundled": true,
+      "project_imports_work": true,
+      "observed_startup_ms": {
+        "initialWindowMs": 420,
+        "workspaceReadyMs": 16073
+      }
+    },
+    "uninstall": {
+      "exit": 0,
+      "test_installation_removed": true,
+      "profile_sentinel_preserved": true
+    },
+    "portable_archive": {
+      "zip_crc_ok": true,
+      "files": 19795,
+      "private_state_and_large_weights_absent": true,
+      "required_runtime_guide_example_and_model_license_present": true,
+      "refreshed_guide_crc_ok": true
+    },
+    "uploader_powershell_parse": {
+      "errors": 0
+    },
+    "website_preview": {
+      "rendered_and_visually_reviewed": true,
+      "local_build_only": true
+    },
+    "runtime_dependency_inspection": {
+      "onnx_pe_imports": [
+        "MSVCP140.dll",
+        "MSVCP140_1.dll",
+        "VCRUNTIME140.dll",
+        "VCRUNTIME140_1.dll"
+      ],
+      "vc_runtime_requirement_documented": true
+    },
+    "final_media": {
+      "ok": true,
+      "preferred_file": "Indra-Final-3min.mp4",
+      "preferred_description": {
+        "ok": true,
+        "file": "Indra-Final-3min.mp4",
+        "use": "One preferred film for the submission and X",
+        "duration_seconds": 180,
+        "video_frames": 5400,
+        "dimensions": [
+          1920,
+          1080
+        ],
+        "fps": 30,
+        "audio_sample_rate": 48000,
+        "audio_channels": 2,
+        "full_decode_ok": true,
+        "bytes": 28737578,
+        "sha256": "30718d315f5eedb25bb01f05d9b59b62c8a987c3e4af2577f9684de8c04c7541",
+        "integrated_loudness_lufs": -15.8,
+        "true_peak_dbfs": -1.2,
+        "scene_count": 23,
+        "narrator": "Kokoro am_michael, separate synthetic narrator generated locally; same voice as the earlier 75-second trailer",
+        "music": "Original locally synthesized electronic score, ducked beneath narration",
+        "captions": "Burned English captions and optional embedded track; timings aligned to narration script, not word-perfect ASR",
+        "footage": "User-supplied desktop, phone and Docker recordings; actual animated product front page captured in a separate empty local profile",
+        "slides": false,
+        "held_screenshot_scenes": false,
+        "simulated_model_responses": false,
+        "limitations": [
+          "Phone task is separate; its generated-program execution was not validated.",
+          "Knowledge interface shown; offline retrieval verified separately.",
+          "Usage estimates aggregate sessions and include unpriced calls, not a provider invoice.",
+          "Docker terminal mode in the supplied recording mounts the selected project.",
+          "Voice interface does not establish native Meta speech inference.",
+          "Built on an existing agent foundation; event contributions documented in repository."
+        ],
+        "published": false
+      },
+      "legacy_edit_metadata": {
+        "source_voice_takes": 9,
+        "creation_time_order_verified": true,
+        "closing_line_placed_at": 175.12,
+        "hero_animation_opening_seconds": 5,
+        "formal_narrator": "Creator-supplied recordings, cleaned and placed in timestamp order",
+        "x_narrator": "Separate synthetic voice: Kokoro am_michael, generated locally",
+        "footage": "Actual supplied screen recordings; one labelled UI-gallery shot in X trailer; decorative city asset for hero"
+      },
+      "files": [
+        {
+          "file": "Indra-Formal-Submission-3min.mp4",
+          "duration_seconds": 180,
+          "video_frames": 5400,
+          "dimensions": [
+            1920,
+            1080
+          ],
+          "audio_sample_rate": 48000,
+          "audio_channels": 2,
+          "full_decode_ok": true,
+          "bytes": 27400951,
+          "sha256": "c54c0d69066e6824d948966699620a38048a9fb29a58e9752f1b9f20dd54709a",
+          "loudness_summary": "Summary:\n\n  Integrated loudness:\n    I:         -16.2 LUFS\n    Threshold: -27.8 LUFS\n\n  Loudness range:\n    LRA:        17.0 LU\n    Threshold: -37.8 LUFS\n    LRA low:   -32.6 LUFS\n    LRA high:  -15.6 LUFS\n\n  True peak:\n    Peak:       -1.5 dBFS\n[out#0/null @ 0000023a2b3e49c0] video:0KiB audio:33750KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:03:00.00 bitrate=N/A speed= 152x elapsed=0:00:01.18"
+        },
+        {
+          "file": "Indra-X-Launch-Trailer-75s.mp4",
+          "duration_seconds": 75,
+          "video_frames": 2250,
+          "dimensions": [
+            1920,
+            1080
+          ],
+          "audio_sample_rate": 48000,
+          "audio_channels": 2,
+          "full_decode_ok": true,
+          "bytes": 24605106,
+          "sha256": "510159bfd2347dab723388969ce4115970fc50fb29c262d7a6d078a772f7974f",
+          "loudness_summary": "Summary:\n\n  Integrated loudness:\n    I:         -15.4 LUFS\n    Threshold: -26.7 LUFS\n\n  Loudness range:\n    LRA:         3.7 LU\n    Threshold: -36.7 LUFS\n    LRA low:   -18.7 LUFS\n    LRA high:  -15.1 LUFS\n\n  True peak:\n    Peak:       -1.1 dBFS\n[out#0/null @ 000002442752f9c0] video:0KiB audio:14062KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nsize=N/A time=00:01:15.00 bitrate=N/A speed= 166x elapsed=0:00:00.45"
+        },
+        {
+          "ok": true,
+          "file": "Indra-Final-3min.mp4",
+          "use": "One preferred film for the submission and X",
+          "duration_seconds": 180,
+          "video_frames": 5400,
+          "dimensions": [
+            1920,
+            1080
+          ],
+          "fps": 30,
+          "audio_sample_rate": 48000,
+          "audio_channels": 2,
+          "full_decode_ok": true,
+          "bytes": 28737578,
+          "sha256": "30718d315f5eedb25bb01f05d9b59b62c8a987c3e4af2577f9684de8c04c7541",
+          "integrated_loudness_lufs": -15.8,
+          "true_peak_dbfs": -1.2,
+          "scene_count": 23,
+          "narrator": "Kokoro am_michael, separate synthetic narrator generated locally; same voice as the earlier 75-second trailer",
+          "music": "Original locally synthesized electronic score, ducked beneath narration",
+          "captions": "Burned English captions and optional embedded track; timings aligned to narration script, not word-perfect ASR",
+          "footage": "User-supplied desktop, phone and Docker recordings; actual animated product front page captured in a separate empty local profile",
+          "slides": false,
+          "held_screenshot_scenes": false,
+          "simulated_model_responses": false,
+          "limitations": [
+            "Phone task is separate; its generated-program execution was not validated.",
+            "Knowledge interface shown; offline retrieval verified separately.",
+            "Usage estimates aggregate sessions and include unpriced calls, not a provider invoice.",
+            "Docker terminal mode in the supplied recording mounts the selected project.",
+            "Voice interface does not establish native Meta speech inference.",
+            "Built on an existing agent foundation; event contributions documented in repository."
+          ],
+          "published": false
+        }
+      ]
+    },
+    "documentation_refresh": {
+      "runtime_critical_hashes_unchanged": true,
+      "sha256": {
+        "Indra.exe": "5c4718cd0863732b5c16d6b4001ceda79f6da2f2c068e135326d115712d459b4",
+        "resources/app/origo-desktop/main.cjs": "971f2e6447df285f0f49ddf0bfb593617f4cc1b27d3a58f51c9566d147a4c201",
+        "resources/app/runtime/python/python.exe": "7c2fc2b303a4ee3cc14cc17b47bc6e8bca98c78792edd123b846a560da44b203",
+        "resources/app/runtime/python/Lib/site-packages/sitecustomize.py": "8fd2df19d86629809e9a0020352b56c95f80f3fd53862e3f163c22dbeb0f3a25",
+        "resources/app/data/models/minilm/model_quantized.onnx": "afdb6f1a0e45b715d0bb9b11772f032c399babd23bfc31fed1c170afc848bdb1"
+      },
+      "scope": "Packaged handbook and README refresh only; code/runtime/model unchanged",
+      "guide_hero_autoplay_verified": true,
+      "mobile_viewport_no_overflow": true
+    },
+    "post_cleanup_working_source": {
+      "ok": true,
+      "scope": "Working source runtime after cleanup; isolated empty profile; no model inference",
+      "api": [
+        {
+          "url": "/api/status",
+          "status": 200
+        },
+        {
+          "url": "/api/sessions?limit=1",
+          "status": 200
+        },
+        {
+          "url": "/api/model/info",
+          "status": 200
+        }
+      ],
+      "timings": {
+        "initialWindowMs": 342,
+        "workspaceReadyMs": 11583
+      }
+    },
+    "cleanup": {
+      "removed_bytes": 3068572713,
+      "operational_dependencies_and_user_state_preserved": true
+    },
+    "docker_snapshot_source_fix": {
+      "scope": "Source-only disposable snapshot runner; separate from mounted Docker terminal mode in demo",
+      "docker_version": "29.8.1",
+      "container_checks_passed": 4,
+      "host_unchanged": true,
+      "result_proposal_returned": true,
+      "regression_tests": "Snapshot staging, regular-file collection and archive traversal/link rejection"
+    }
+  },
+  "release_assets": [
+    {
+      "name": "EDIT-NOTES.txt",
+      "bytes": 1460,
+      "sha256": "ee35819f684b36d4e7ecc91ef33f12e0030efaa89cf2ed688ecef1f61eff296e"
+    },
+    {
+      "name": "English-voiceover.srt",
+      "bytes": 5179,
+      "sha256": "433fc4c88fb7255f0724c18674ef7ff0bb78fe88bc410e80a3963cc4a51741da"
+    },
+    {
+      "name": "English-voiceover.txt",
+      "bytes": 3454,
+      "sha256": "530bdff3819a2068ddf4274fb7ab503605aea92e8198ba688b6442a3a31addd0"
+    },
+    {
+      "name": "Formal-audio-placement.json",
+      "bytes": 2675,
+      "sha256": "12dc14981e0c22f29c0895beec08307fde2cc727bec9587cb05ce0bdbcf6d567"
+    },
+    {
+      "name": "Indra-1.8.0-rc.1-windows-x64-portable.zip",
+      "bytes": 385174224,
+      "sha256": "527de32a069aaaa626c33026864c302035e5823325cc195160db1bee7e83e70f"
+    },
+    {
+      "name": "Indra-real-footage-3min.mp4",
+      "bytes": 28737578,
+      "sha256": "30718d315f5eedb25bb01f05d9b59b62c8a987c3e4af2577f9684de8c04c7541"
+    },
+    {
+      "name": "Indra-Setup-1.8.0-rc.1.exe",
+      "bytes": 371725944,
+      "sha256": "7f68bc355b627a94f83301ea393d9661a485d6bd8329f67fde55183bbfa56249"
+    },
+    {
+      "name": "Indra-X-Launch-Trailer-75s.mp4",
+      "bytes": 24605106,
+      "sha256": "510159bfd2347dab723388969ce4115970fc50fb29c262d7a6d078a772f7974f"
+    },
+    {
+      "name": "INSTALL-FIRST.txt",
+      "bytes": 1542,
+      "sha256": "a344e41605a8fe41eb6cab521d0de5e491f87c21a7ebd584d6a870300812f58c"
+    },
+    {
+      "name": "MEDIA-VERIFICATION.json",
+      "bytes": 5861,
+      "sha256": "b0b572d883f500f04f741555d5fabd7d820c9a8b65c48d541057972e5028ab53"
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "bytes": 927,
+      "sha256": "13ee716edfc561839899bea1b8765910eb6d04885573f31f61bc3cb9cbf9dea1"
+    }
+  ],
+  "not_verified": [
+    "Independent second physical PC acceptance",
+    "Code signing (candidate installer is unsigned)",
+    "All optional connectors, every provider/model and the entire imported framework suite",
+    "Hosted GitHub Actions/Pages execution before the user publishes"
+  ],
+  "publication_at_preparation": {
+    "pushed": false,
+    "pages_deployed": false,
+    "release_published": false,
+    "old_repository_modified": false
+  },
+  "prerequisites": {
+    "os": "Windows x64",
+    "offline_embeddings": "Microsoft Visual C++ v14 x64 runtime (not bundled)",
+    "optional_features": "Separately configured Docker, FFmpeg, Tailscale or local model server as applicable"
+  }
+}

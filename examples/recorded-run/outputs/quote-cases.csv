@@ -1,0 +1,4 @@
+id,subtotal,discount,shipping,tax,total
+exact_free_shipping,500.00,0.00,0.00,25.00,525.00
+half_up_line_rounding,2.68,0.00,39.00,0.13,41.81
+discount_then_tax,500.00,50.00,0.00,22.50,472.50

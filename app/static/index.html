@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0c1018">
+  <meta name="description" content="A local-first AI workstation with a bounded, inspectable agent harness.">
+  <title>Indra Origo</title>
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/theme.css">
+  <script>try { document.documentElement.dataset.theme = localStorage.getItem('indra.theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'); } catch { document.documentElement.dataset.theme = 'dark'; }</script>
+</head>
+<body>
+<div class="shell">
+  <aside class="side" aria-label="Primary navigation">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">I</div>
+      <div><b>INDRA ORIGO</b><small>LOCAL-FIRST · AI WORKSTATION</small></div>
+    </div>
+    <button class="new" id="new" type="button"><span aria-hidden="true">＋</span> New conversation</button>
+    <div class="session-area">
+      <div class="label session-label">RECENT CHATS <button id="refresh-sessions" type="button" title="Refresh recent chats" aria-label="Refresh recent chats">↻</button></div>
+      <div id="sessions" class="session-list" aria-label="Saved conversations"><div class="session-empty">Loading saved chats…</div></div>
+    </div>
+    <div class="label workspace-label">WORKSPACE</div>
+    <button class="nav active" data-panel="chat" type="button" title="Copilot" aria-label="Copilot"><span class="navico">◈</span> Copilot</button>
+    <button class="nav" data-panel="files" type="button" title="Files and context" aria-label="Files and context"><span class="navico">▤</span> Files & context</button>
+    <button class="nav" data-panel="knowledge" type="button" title="Knowledge Studio" aria-label="Knowledge Studio"><span class="navico">⌕</span> Knowledge Studio <span id="rag-nav-count" class="navcount">0</span></button>
+    <button class="nav" data-panel="approvals" type="button" title="Approval queue" aria-label="Approval queue"><span class="navico">✓</span> Approval queue <span id="count" class="navcount">0</span></button>
+    <button class="nav" data-panel="runs" type="button" title="Run history" aria-label="Run history"><span class="navico">◷</span> Run history</button>
+    <button class="nav" data-panel="extensions" type="button" title="Skills and plugins" aria-label="Skills and plugins"><span class="navico">⊞</span> Skills & plugins</button>
+    <button class="nav" data-panel="permissions" type="button" title="Permissions" aria-label="Permissions"><span class="navico">◇</span> Permissions <span id="permission-count" class="navcount">0</span></button>
+    <button class="nav" data-panel="diagnostics" type="button" title="Diagnostics" aria-label="Diagnostics"><span class="navico">⌁</span> Diagnostics</button>
+    <div class="sidebottom">
+      <div class="status" role="status" aria-live="polite">
+        <i id="dot" aria-hidden="true"></i>
+        <div><b id="model">Connecting…</b><small id="modelsub">Checking inference</small></div>
+      </div>
+      <div class="private"><span aria-hidden="true">⌑</span> Local audit trail · no shell access</div>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <div class="breadcrumbs">Workspace <em>/</em> <b id="title">Copilot</b></div>
+      <div class="head-actions"><button id="command-palette-open" type="button" title="Open commands (Ctrl or Command + K)">⌘K Commands</button><span class="kbdhelp">Ctrl/⌘ + Enter to send</span><button id="theme-toggle" type="button" aria-label="Switch color theme" title="Switch light and dark theme">◐ Theme</button><button id="export-chat" type="button" title="Download the current saved conversation as Markdown">Export chat ↓</button><button id="refresh" type="button" aria-label="Refresh workstation status" title="Refresh">↻</button><button id="remote-signout" type="button" title="End this remote session" hidden>Sign out</button></div>
+    </header>
+
+    <section class="panel active" id="p-chat" aria-label="Copilot">
+      <div class="chat">
+        <div class="hero">
+          <div class="eyebrow"><span class="pulse"></span> YOUR LOCAL WORKSPACE, AUGMENTED</div>
+          <div class="hero-symbol" aria-hidden="true"><span class="hero-symbol-core">✦</span><span class="hero-symbol-ring"></span></div>
+          <h1>Make progress.<br><em>Stay in control.</em></h1>
+          <p>An agent that explores your project, explains what it finds, and prepares file changes for your approval. You control the context, model and actions.</p>
+          <div class="hero-promises"><span>◎ Inspectable runs</span><span>◇ Approval-gated edits</span><span>✳ Your model, your choice</span></div>
+        </div>
+        <div class="suggestions" id="suggestions">
+          <button data-prompt="Inspect this workspace and tell me what this project does, its architecture, and the three highest-impact next steps." type="button"><span class="suggestion-icon">⌕</span><span><b>Understand my project</b><small>Map architecture and priorities</small></span><span class="card-arrow">↗</span></button>
+          <button data-prompt="Help me plan a research experiment. Inspect the workspace and propose a measurable hypothesis, baseline, metrics, and ablations." type="button"><span class="suggestion-icon">⌁</span><span><b>Plan an experiment</b><small>Build a testable research plan</small></span><span class="card-arrow">↗</span></button>
+          <button data-prompt="Review this workspace for technical debt, reliability risks, and missing tests. Prioritize issues by impact and evidence." type="button"><span class="suggestion-icon">⚒</span><span><b>Review my system</b><small>Find evidence-backed fixes</small></span><span class="card-arrow">↗</span></button>
+          <button data-prompt="Help me get unstuck. Inspect project context and ask one focused question if needed." type="button"><span class="suggestion-icon">✳</span><span><b>Help me get unstuck</b><small>Find the next useful action</small></span><span class="card-arrow">↗</span></button>
+          <button data-prompt="Act as a rigorous study coach. First inspect the available notes or code relevant to my topic, explain it from first principles with one concrete example, then quiz me with one question at a time and adapt to my answer. Do not invent material that is not in the workspace." type="button"><span class="suggestion-icon">∑</span><span><b>Study coach</b><small>Learn, practice, and test understanding</small></span><span class="card-arrow">↗</span></button>
+          <button data-prompt="Help me turn work notes into an actionable brief. If I have not included the notes, ask me to paste them. Produce a concise summary, decisions, open questions, action items with owner and due-date placeholders, and a professional follow-up draft. Mark missing facts instead of inventing them." type="button"><span class="suggestion-icon">▤</span><span><b>Notes → actions</b><small>Meeting summaries and follow-ups</small></span><span class="card-arrow">↗</span></button>
+        </div>
+        <div id="conversation" class="conversation" aria-live="polite" aria-relevant="additions text"></div>
+        <form id="form" class="composer">
+          <label class="sr-only" for="message">Message Indra Origo</label>
+          <textarea id="message" rows="2" placeholder="Ask Origo to investigate, explain, plan, or prepare a change…" required maxlength="12000"></textarea>
+          <div class="composer-tools">
+            <input id="file-input" type="file" hidden multiple accept=".txt,.md,.markdown,.csv,.json,.jsonl,.py,.js,.ts,.tsx,.jsx,.html,.css,.xml,.yaml,.yml,.toml,.ini,.log,.sql,.sh,.bat,.ps1,.pdf,image/png,image/jpeg,image/webp,audio/*,video/*">
+            <button id="attach-files" class="btn" type="button" title="Attach text, code, image, audio, or video files; PDF parsing is disabled by default">＋ Attach files</button>
+            <button id="voice-input" class="btn" type="button" title="Dictate using your browser's speech recognition">◉ Voice input</button>
+            <label class="inline-check"><input id="voice-output" type="checkbox"> Read responses aloud</label>
+            <button id="stop-speech" class="btn" type="button" title="Stop spoken output">Stop voice</button>
+            <label class="inline-check" title="Images are forwarded only when enabled; the chosen model must support vision"><input id="send-images" type="checkbox"> Send images to model</label>
+            <span id="voice-status" class="voice-status" role="status" aria-live="polite">Browser speech recognition may use your browser vendor's service; it is not guaranteed offline.</span>
+          </div>
+          <div id="upload-previews" class="upload-previews" hidden aria-label="Selected file previews"></div>
+          <div id="context-attachment-indicator" class="context-attachment" hidden><span id="context-attachment-label">Workspace context attached for one turn</span><button id="remove-context" type="button" aria-label="Remove workspace context attachment">Remove</button></div>
+          <div id="inference-privacy" class="inference-privacy" role="status">Checking inference destination…</div>
+          <div class="composefoot">
+            <small><span class="security-dot"></span> Workspace-scoped · network and sensitive tools ask first</small>
+            <label class="mode-picker" for="agent-mode">MODE <select id="agent-mode" aria-label="Agent operating mode"><option value="build">Build · proposed edits</option><option value="plan">Plan · read-only</option></select></label>
+            <div class="compose-buttons"><button id="cancel" class="btn danger cancel-btn" type="button" hidden>Cancel run <kbd>Esc</kbd></button><button id="send" type="submit">Send <span aria-hidden="true">↗</span></button></div>
+          </div>
+        </form>
+        <div class="disclaimer">Voice recognition may use your browser vendor's service. Uploaded files are sent only when attached to a message; audio/video files are preview-only. Agent output can be wrong.</div>
+      </div>
+    </section>
+
+    <section class="panel page" id="p-files" aria-label="Files and context">
+      <div class="page-intro"><small>PROJECT CONTEXT</small><h1>Files & <em>context</em></h1><p>Choose the project Indra can inspect. Only this folder is in scope for file tools.</p></div>
+      <div class="card workspace-card">
+        <div class="cardhead"><span>ACTIVE WORKSPACE</span><span class="readonly-label">LOCAL PATH</span></div>
+        <div class="workspace-picker">
+          <label class="sr-only" for="workspace-path">Local project folder path</label>
+          <input id="workspace-path" type="text" placeholder="C:\Users\you\Projects\my-project" autocomplete="off" spellcheck="false">
+          <button class="btn primary" id="choose-workspace" type="button">Use folder</button>
+        </div>
+        <p class="helptext">Enter a folder path on this computer, then select <b>Use folder</b>. The path stays in local settings. Pick a project folder—not the whole drive or your user home.</p>
+        <div id="root" class="root-label">Loading workspace…</div>
+      </div>
+      <div class="card scratchpad-card">
+        <div class="cardhead"><span>INSPECTABLE PROJECT SCRATCHPAD</span><span class="readonly-label">LOCAL · PERSISTENT</span></div>
+        <p class="helptext">Keep explicit notes, hypotheses, assumptions, and open questions here. This is user-visible project memory, not hidden model reasoning; it is not automatically added to prompts.</p>
+        <label class="sr-only" for="scratchpad-content">Project scratchpad notes</label>
+        <textarea id="scratchpad-content" rows="5" maxlength="30000" placeholder="Hypotheses, decisions, open questions, next experiments…"></textarea>
+        <div class="composefoot"><small id="scratchpad-status">Loading saved notes…</small><button id="scratchpad-save" class="btn primary" type="button">Save notes</button></div>
+      </div>
+      <div class="split">
+        <div class="card">
+          <div class="cardhead"><span>WORKSPACE FILES</span><button id="reload" type="button">Refresh</button></div>
+          <div class="file-search-toolbar"><label class="sr-only" for="filesearch">Search workspace text</label><input id="filesearch" type="search" maxlength="500" placeholder="Search code, docs, notes, errors…" autocomplete="off"><button id="searchfiles" class="btn" type="button">Search</button></div>
+          <div id="searchresults" class="search-results" hidden aria-live="polite"></div>
+          <div id="files" class="file-list"><div class="empty">Loading files…</div></div>
+        </div>
+        <div class="card">
+          <div class="cardhead" id="previewtitle">FILE PREVIEW</div>
+          <pre id="preview" class="preview">Choose a text file to inspect it.</pre>
+        </div>
+      </div>
+      <div class="card git-card">
+        <div class="cardhead"><span>GIT WORKING TREE</span><button id="git-refresh" type="button">Refresh status ↻</button></div>
+        <p class="helptext">Read-only repository status. This does not fetch, commit, checkout, reset or modify files. Uncommitted work is yours; review changes before accepting any proposed edits.</p>
+        <div id="git-summary" class="git-summary">Checking Git status…</div>
+        <pre id="git-status-output" class="git-status-output">Git status will appear here.</pre>
+      </div>
+      <div class="card context-card">
+        <div class="cardhead"><span>BOUNDED CONTEXT PACK</span><span id="contextmeta">Not built yet</span></div>
+        <div class="context-toolbar"><label class="sr-only" for="contextquery">Optional context relevance query</label><input id="contextquery" type="text" maxlength="500" placeholder="What is the task? (optional; improves file prioritization)"><div class="context-actions"><button id="buildcontext" class="btn primary" type="button">Build context</button><button id="usecontext" class="btn" type="button" disabled>Use in next chat</button></div></div>
+        <p class="helptext">Context is not sent to the model unless you explicitly attach it. The next chat request includes at most 12,000 characters, then clears the attachment.</p>
+        <pre id="contextpreview" class="context-preview">Preview the bounded, secret-filtered project files. Then choose whether to attach them to the next chat request.</pre>
+      </div>
+    </section>
+
+    <section class="panel page rag-page" id="p-knowledge" aria-label="Knowledge Studio">
+      <div class="page-intro rag-intro">
+        <small>LOCAL KNOWLEDGE · EVIDENCE FIRST</small>
+        <div class="rag-intro-row"><div><h1>Your library, <em>with receipts.</em></h1><p>Build a private, searchable knowledge layer for Origo. Retrieve evidence, inspect exact source chunks, then send cited context to Copilot. Lexical search works offline; semantic retrieval is optional.</p></div><span id="rag-status-pill" class="rag-status-pill" role="status">Checking library…</span></div>
+      </div>
+      <div class="rag-metrics" aria-label="Knowledge library statistics">
+        <div class="rag-metric"><span>DOCUMENTS</span><b id="rag-stat-docs">—</b><small>Indexed locally</small></div>
+        <div class="rag-metric"><span>CHUNKS</span><b id="rag-stat-chunks">—</b><small>Searchable passages</small></div>
+        <div class="rag-metric"><span>RETRIEVAL</span><b id="rag-stat-mode">—</b><small>Current search route</small></div>
+        <div class="rag-metric"><span>SEMANTIC</span><b id="rag-stat-embed">Optional</b><small>Needs an embeddings endpoint</small></div>
+      </div>
+      <div class="rag-grid">
+        <div class="rag-main-column">
+          <div class="card rag-upload-card">
+            <div class="cardhead"><span>01 · ADD KNOWLEDGE</span><span class="readonly-label">LOCAL INDEX · MAX 7 MiB / FILE</span></div>
+            <div class="rag-dropzone" id="rag-dropzone">
+              <div class="rag-drop-icon" aria-hidden="true">↥</div><b>Bring your source material</b><p>Drop files here or choose files. Text, Markdown, code, CSV, JSON and YAML are supported by default. PDF extraction is disabled by default for security; use only trusted PDFs with the explicit opt-in.</p>
+              <input id="rag-file-input" type="file" hidden multiple accept=".txt,.md,.markdown,.rst,.pdf,.py,.js,.ts,.tsx,.jsx,.html,.css,.json,.jsonl,.yaml,.yml,.toml,.ini,.cfg,.xml,.sql,.sh,.bat,.ps1,.csv,.tsv,.java,.c,.h,.cpp,.hpp,.rs,.go,.tex,.bib,.log">
+              <button id="rag-choose-files" class="btn primary" type="button">Choose files</button><small>Secrets and credential files are blocked; common embedded token patterns are redacted.</small>
+            </div>
+            <div class="rag-upload-actions"><button id="rag-index-workspace" class="btn" type="button">Index selected workspace</button><span id="rag-upload-status" aria-live="polite">Nothing uploading.</span></div>
+            <div id="rag-ingest-results" class="rag-ingest-results" aria-live="polite" hidden></div>
+          </div>
+          <div class="card rag-search-card">
+            <div class="cardhead"><span>02 · RETRIEVE EVIDENCE</span><span class="readonly-label">BM25 + OPTIONAL DENSE · RERANKED</span></div>
+            <form id="rag-search-form" class="rag-search-form">
+              <label class="sr-only" for="rag-query">Search the indexed library</label>
+              <textarea id="rag-query" rows="2" maxlength="1200" placeholder="Ask a specific question or search for a concept, function, experiment, or decision…" required></textarea>
+              <div class="rag-search-controls"><label for="rag-limit">Evidence chunks <select id="rag-limit"><option value="4">4 · focused</option><option value="8" selected>8 · balanced</option><option value="12">12 · broad</option></select></label><span id="rag-search-note">Sources stay local unless you explicitly configure an embedding provider.</span><button id="rag-search-button" class="btn primary" type="submit">Search library ↗</button></div>
+            </form>
+            <div id="rag-results-summary" class="rag-results-summary" aria-live="polite">Search your indexed documents to see retrieved passages and citation labels.</div>
+            <div id="rag-results" class="rag-results"></div>
+            <div class="rag-ask-bar"><div><b>Use the evidence in Copilot</b><p>Retrieves a fresh context pack and attaches it to your next chat turn. The assistant still needs to cite and qualify the evidence.</p></div><button id="rag-ask-copilot" class="btn primary" type="button" disabled>Ask Copilot with evidence</button></div>
+          </div>
+        </div>
+        <div class="rag-side-column">
+          <div class="card rag-library-card">
+            <div class="cardhead"><span>YOUR LIBRARY</span><button id="rag-refresh" type="button">Refresh ↻</button></div>
+            <div class="rag-library-tools" role="search" aria-label="Filter indexed documents">
+              <label class="sr-only" for="rag-library-filter">Filter documents by filename or path</label>
+              <input id="rag-library-filter" type="search" maxlength="160" placeholder="Filter by filename or path…" autocomplete="off">
+              <label class="sr-only" for="rag-library-source">Filter by source type</label>
+              <select id="rag-library-source"><option value="all">All sources</option><option value="upload">Uploads</option><option value="workspace">Workspace</option></select>
+              <span id="rag-library-count" class="rag-library-count" aria-live="polite">—</span>
+            </div>
+            <div id="rag-documents" class="rag-documents"><div class="empty">Loading local documents…</div></div>
+          </div>
+          <div class="card rag-pipeline-card">
+            <div class="cardhead"><span>RETRIEVAL PIPELINE</span><span class="readonly-label">INSPECTABLE</span></div>
+            <div class="rag-pipeline">
+              <div><i>1</i><span><b>Extract & redact</b><small>Bounded text extraction, secret-file exclusions and pattern redaction.</small></span></div>
+              <div><i>2</i><span><b>Chunk with overlap</b><small>Paragraph-aware passages keep stable source offsets and neighboring context.</small></span></div>
+              <div><i>3</i><span><b>Hybrid recall</b><small>SQLite FTS5/BM25 plus dense similarity when a compatible embedding model is configured.</small></span></div>
+              <div><i>4</i><span><b>Fuse & rerank</b><small>Reciprocal-rank fusion, term coverage, phrase match and source-title signals.</small></span></div>
+              <div><i>5</i><span><b>Cite the evidence</b><small>Every result receives a stable per-query label and source identity.</small></span></div>
+            </div>
+            <div id="rag-engine-detail" class="rag-engine-detail">Retrieval confidence is a heuristic, not a probability. Source labels such as [R1] belong to each result/context pack.</div>
+          </div>
+          <div class="rag-guardrail"><span aria-hidden="true">◇</span><div><b>Evidence is not authority</b><p>Retrieved text is treated as untrusted data. It cannot grant tools or override policy. Scanned/image-only PDFs need OCR before indexing; this build intentionally does not pretend to OCR them.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel page" id="p-approvals" aria-label="Approval queue">
+      <div class="page-intro"><small>HUMAN IN THE LOOP</small><h1>Nothing changes <em>without you.</em></h1><p>Review the complete proposal. Overwrites use a verified backup; stale proposals are rejected instead of clobbering newer edits.</p></div>
+      <div id="actions" class="stack"><div class="empty">Loading proposed changes…</div></div>
+    </section>
+
+    <section class="panel page" id="p-runs" aria-label="Run history and metrics">
+      <div class="page-intro page-intro-row"><div><small>OBSERVABILITY</small><h1>Every run leaves <em>a trace.</em></h1><p>Operational telemetry from recent local runs. This is not a model benchmark or an automatic quality score.</p></div><button id="export-data" class="btn" type="button">Export research bundle ↗</button></div>
+      <div class="metric-grid">
+        <article class="metric-card"><small>RECENT RUNS</small><b id="metric-sample">—</b><span>Stored run sample</span></article>
+        <article class="metric-card"><small>COMPLETION RATE</small><b id="metric-success">—</b><span>Finished runs only</span></article>
+        <article class="metric-card"><small>MEDIAN DURATION</small><b id="metric-median">—</b><span>Wall-clock runtime</span></article>
+        <article class="metric-card"><small>TOOL ERROR RATE</small><b id="metric-tool-errors">—</b><span>Errors / calls</span></article>
+      </div>
+      <div class="metrics-note" id="metrics-note">Metrics populate after local runs have completed.</div>
+      <section class="card feedback-summary" aria-labelledby="feedback-summary-title">
+        <div class="cardhead"><span id="feedback-summary-title">HUMAN OUTCOME REVIEW</span><span class="readonly-label">OPTIONAL · LOCAL ONLY</span></div>
+        <div class="feedback-summary-body">
+          <p class="helptext">Your ratings help you inspect your own runs; they are subjective signals, not a model score. Ratings are saved in the local database only, and are not sent to the model, used for training, or used to change behavior automatically.</p>
+          <div id="feedback-summary-content" class="feedback-breakdown" aria-live="polite"><span class="helptext">Loading optional outcome ratings…</span></div>
+          <div class="feedback-summary-actions"><span id="feedback-summary-status" class="helptext">No rating is required to use Origo.</span><button id="feedback-clear" class="btn" type="button">Clear my ratings</button></div>
+        </div>
+      </section>
+      <div id="runs" class="stack"><div class="empty">Loading run history…</div></div>
+    </section>
+
+    <section class="panel page" id="p-extensions" aria-label="Skills, plugins, web research and sandbox">
+      <div class="page-intro"><small>COMPOSABLE AGENT CAPABILITIES</small><h1>Extend the <em>harness.</em></h1><p>Choose workflow skills, inspect installed local plugins, research public pages, and run checks in an opt-in Docker sandbox. Skills are reference instructions; plugins and external content never override harness policy.</p></div>
+      <div class="split extensions-grid">
+        <div class="card">
+          <div class="cardhead"><span>WORKFLOW SKILLS</span><button id="extensions-refresh" type="button">Refresh registry ↻</button></div>
+          <p class="helptext">Selected skills are attached to the next turns as bounded workflow guidance. Review custom skills before enabling them.</p>
+          <div id="skills-list" class="extension-list"><div class="empty">Loading installed skills…</div></div>
+          <pre id="skill-preview" class="extension-result" hidden>Choose “View” to inspect a skill's instructions.</pre>
+        </div>
+        <div class="card">
+          <div class="cardhead"><span>PLUGIN REGISTRY</span><span id="plugin-summary" class="readonly-label">LOCAL HTTP JSON</span></div>
+          <p class="helptext">Only enabled manifests targeting an explicitly trusted loopback HTTP JSON service are callable. Indra does not import arbitrary plugin code into its Python process.</p>
+          <div id="plugins-list" class="extension-list"><div class="empty">Loading plugins…</div></div>
+          <pre class="extension-result">To add a plugin, copy plugins/examples/local-notes/plugin.json, review its schema and endpoint, set enabled=true, then set INDRA_ENABLE_LOCAL_HTTP_PLUGINS=true in .env. Restart or refresh the registry.</pre>
+        </div>
+      </div>
+      <div class="card task-graph-card">
+        <div class="cardhead"><span>DEPENDENCY-AWARE AGENT TASK GRAPH</span><span class="readonly-label">READ-ONLY CHILD AGENTS</span></div>
+        <p class="helptext">Describe a small task DAG as JSON. Independent nodes can run concurrently; nodes with <code>depends_on</code> wait for successful prerequisites and receive bounded outputs as untrusted context. This uses your configured model and may incur provider usage.</p>
+        <label class="field-label" for="task-graph-json">Task graph JSON</label>
+        <textarea id="task-graph-json" rows="8" spellcheck="false">[
+  {"id":"architecture","task":"Inspect the project architecture and identify the most important design risks."},
+  {"id":"tests","task":"Review the test suite and identify high-impact missing regression tests."},
+  {"id":"priorities","task":"Synthesize the architecture and test findings into a prioritized implementation plan.","depends_on":["architecture","tests"]}
+]</textarea>
+        <div class="composefoot"><small>1–6 nodes · max concurrency 1–3 · cyclic graphs are rejected before model calls</small><button id="task-graph-run" class="btn primary" type="button">Run task graph</button></div>
+        <pre id="task-graph-result" class="extension-result" aria-live="polite">Task-graph results and dependency status appear here.</pre>
+      </div>
+      <div class="split extensions-grid">
+        <div class="card">
+          <div class="cardhead"><span>PUBLIC WEB RESEARCH</span><span class="readonly-label">BOUNDED STATIC FETCH</span></div>
+          <p class="helptext">Search results are discovery hints. Page extraction supports public static HTML/text/JSON; no browser JavaScript, login bypass, CAPTCHA bypass or binary downloads.</p>
+          <div class="workspace-picker"><label class="sr-only" for="web-query">Search query</label><input id="web-query" type="search" maxlength="500" placeholder="Search the public web…"><button id="web-search-button" class="btn" type="button">Search only</button><button id="web-research-button" class="btn primary" type="button">Research + fetch sources</button></div>
+          <div class="workspace-picker"><label class="sr-only" for="web-url">Public page URL</label><input id="web-url" type="url" maxlength="2048" placeholder="https://example.org/article"><button id="web-fetch-button" class="btn" type="button">Extract page</button><button id="web-crawl-button" class="btn" type="button">Crawl same host (max 5)</button></div>
+          <pre id="web-result" class="extension-result" aria-live="polite">Web results appear here. Private IPs, internal hostnames, custom ports and blocked redirects are rejected.</pre>
+        </div>
+        <div class="card">
+          <div class="cardhead"><span>ISOLATED COMMAND RUNNER</span><span id="sandbox-badge" class="readonly-label">OPT-IN</span></div>
+          <p class="helptext">Commands run only inside Docker, with no network and a disposable sanitized copy of the workspace. Output and diffs are returned for review; they are never copied back automatically.</p>
+          <div id="sandbox-summary" class="diag-summary">Checking Docker sandbox configuration…</div>
+          <label class="field-label" for="sandbox-command">Command as a JSON argv array (no shell string)</label>
+          <textarea id="sandbox-command" rows="3" spellcheck="false">["python", "--version"]</textarea>
+          <label class="sandbox-network-toggle"><input id="sandbox-network-access" type="checkbox"><span><b>Allow outbound network for this run</b><small>Off by default. If enabled, Docker bridge networking is unrestricted by domain. Review the command and approve the warning.</small></span></label>
+          <div class="composefoot"><small>Resource limits shown below · network off unless separately approved</small><button id="sandbox-run-button" class="btn primary" type="button">Run in sandbox</button></div>
+          <pre id="sandbox-result" class="extension-result" aria-live="polite">Sandbox commands are disabled until Docker Desktop is installed and INDRA_ENABLE_DOCKER_SANDBOX=true is set.</pre>
+          <div id="sandbox-propose-ui" class="sandbox-propose-ui" hidden>
+            <div class="cardhead"><span>REVIEW SANDBOX CHANGES</span><span class="readonly-label">NO AUTO-WRITEBACK</span></div>
+            <p class="helptext">Select text-file changes to turn into normal write proposals. Indra will re-check the destination path and create a diff against your current workspace. Nothing is applied until you approve each proposal in the Approval Queue.</p>
+            <div id="sandbox-propose-list" class="sandbox-propose-list"></div>
+            <div class="permission-actions"><button id="sandbox-propose-button" class="btn primary" type="button">Create selected proposals</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cardhead"><span>CAPABILITY SECURITY CONTRACT</span><span class="readonly-label">EXPLICIT BOUNDARIES</span></div>
+        <div class="help-grid">
+          <p><b>Skills</b><span>Markdown-only workflow instructions. No executable code. Selected content is bounded and always subordinate to the core safety policy.</span></p>
+          <p><b>Plugins</b><span>Declarative JSON manifests + explicitly enabled loopback HTTP JSON endpoints. Only read-only-claimed tools are exposed; the claim is not proof that a service is side-effect-free.</span></p>
+          <p><b>Web</b><span>HTTPS by default; public DNS/IP checks, redirect revalidation, no environment proxies, rate-limited hosts and capped content.</span></p>
+          <p><b>Parallel agents</b><span>Independent subtasks and dependency-aware task graphs; concurrency is bounded per graph and across the process. Children are read-only and cannot recurse or call plugins.</span></p>
+          <p><b>Docker sandbox</b><span>Disposable sanitized snapshot, no network by default, non-root command user, CPU/RAM/PID/time caps. Optional bridge networking is a per-run high-risk permission and is not domain-filtered.</span></p>
+          <p><b>Honest limitation</b><span>Public URL validation mitigates SSRF but is not a network firewall. Use OS/container egress restrictions for high-assurance isolation.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel page" id="p-permissions" aria-label="Permission center">
+      <div class="page-intro"><small>SAFETY · AUTONOMY · TRUST</small><h1>You decide what <em>can happen.</em></h1><p>Network, plugins and Docker commands pause before they run. Workspace edits remain proposals until you approve their diffs. These controls are local to this workstation.</p></div>
+      <div class="split permission-grid">
+        <div class="card permission-card">
+          <div class="cardhead"><span>AGENT NETWORK POLICY</span><span id="network-policy-badge" class="readonly-label">ASK FIRST</span></div>
+          <div class="permission-setting">
+            <div><b>Public internet access</b><p class="helptext">Default: ask before every agent-initiated web tool. Direct Search, Research and Fetch buttons show a separate review confirmation before sending a request. “Block” denies agent web tools; it does not block manually confirmed web actions.</p></div>
+            <label class="field-label inline-label" for="network-policy">Policy</label><select id="network-policy"><option value="ask">Ask every time</option><option value="deny">Block agent network</option></select>
+          </div>
+          <div class="permission-callout"><b>What approval means</b><span>You see the actual query or target host before access. “Allow domain for this session” applies only to that exact hostname and expires when Indra restarts.</span></div>
+          <div class="permission-actions"><button id="save-network-policy" class="btn primary" type="button">Save network policy</button><button id="clear-domain-grants" class="btn" type="button">Clear session grants</button></div>
+          <div id="domain-grants" class="domain-grants" aria-live="polite">No domains granted for this session.</div>
+        </div>
+        <div class="card permission-card">
+          <div class="cardhead"><span>DOCKER EXECUTION SANDBOX</span><span id="docker-policy-badge" class="readonly-label">OFF</span></div>
+          <div class="permission-setting">
+            <div><b>Allow isolated command runs</b><p class="helptext">When enabled and Docker is ready, the model may request a command. Each command still requires your approval. The container gets a sanitized copy, no network, and no host workspace mount.</p></div>
+            <label class="toggle-label"><input id="docker-sandbox-enabled" type="checkbox"><span>Enable</span></label>
+          </div>
+          <div id="docker-policy-summary" class="diag-summary">Checking Docker…</div>
+          <div class="permission-actions"><button id="refresh-permissions" class="btn" type="button">Refresh status</button><button id="build-sandbox-image" class="btn primary" type="button">Build dev image…</button><button id="pull-sandbox-image" class="btn" type="button">Pull sandbox image…</button><button id="reset-sandbox-image" class="btn" type="button">Use .env image</button></div>
+          <p class="helptext">Building the dev image downloads a base image and packages after explicit confirmation; its build context is only the reviewed docker/ directory (not your workspace or .env). You can also pull the selected image or revert to the .env default.</p>
+        </div>
+      </div>
+      <div class="card permission-queue-card">
+        <div class="cardhead"><span>PENDING ACTION PERMISSIONS</span><span id="pending-summary" class="readonly-label">0 WAITING</span></div>
+        <p class="helptext">An agent run stays paused until you approve or deny the request. Requests expire after three minutes. Approvals are narrow to the action shown.</p>
+        <div id="pending-permissions" class="stack"><div class="empty">No pending permission requests.</div></div>
+      </div>
+      <div class="card permission-contract">
+        <div class="cardhead"><span>SAFETY CONTRACT</span><span class="readonly-label">DEFAULT DENY AT THE BOUNDARY</span></div>
+        <div class="help-grid">
+          <p><b>Plan mode</b><span>Read-only tools only. No write proposals, plugin calls or Docker commands are exposed.</span></p>
+          <p><b>Build mode</b><span>Can propose edits, but the apply gate checks the original file hash, creates a backup for overwrite and rejects stale changes.</span></p>
+          <p><b>Network</b><span>Every agent-initiated web operation requires a prompt by default. URL validation is not a network firewall; keep OS egress controls enabled for high-assurance work.</span></p>
+          <p><b>Docker</b><span>No network by default, no host directory mounts, read-only root, dropped capabilities and resource limits. Optional bridge networking is broad outbound access, not a domain allowlist. The image and Docker daemon remain trusted components.</span></p>
+          <p><b>Plugins</b><span>Each agent-invoked plugin call asks first. A plugin's read-only declaration is not independently verified.</span></p>
+          <p><b>Not a promise of commercial parity</b><span>Indra implements a transparent subset of coding-agent workflows. It is not a complete clone of Codex or Antigravity.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel page" id="p-diagnostics" aria-label="Diagnostics and settings">
+      <div class="page-intro"><small>LOCAL SERVICE FABRIC</small><h1>Know what is <em>working.</em></h1><p>Inspect model, llama-swap, llama.cpp, Qdrant and Workbench endpoints. Checks are read-only; optional services may be offline without blocking the UI.</p></div>
+      <div class="card model-card">
+        <div class="cardhead"><span>MODEL ROUTING</span><span class="readonly-label">OPENAI-COMPATIBLE</span></div>
+        <div class="model-picker"><label for="provider-profile">Provider profile</label><select id="provider-profile"><option value="local">Local gateway</option><option value="hosted">Hosted compatible endpoint</option></select><button id="save-provider-profile" class="btn" type="button">Switch profile</button></div>
+        <p id="provider-profile-help" class="helptext">The local router is the default. Hosted credentials are read from .env and never shown in this UI.</p>
+        <div class="model-picker"><label for="model-select">Advertised model</label><select id="model-select"><option value="">Detecting available models…</option></select><button id="save-model" class="btn primary" type="button">Use model</button></div>
+        <p class="helptext" id="model-help">Switch between model aliases exposed by your configured gateway. Your selection is stored locally.</p>
+        <div class="smoke-toolbar"><button id="model-smoke" class="btn" type="button">Test inference + tool calls</button><span id="model-smoke-result" class="smoke-result" role="status" aria-live="polite">Does not execute any real tool. Run manually after the model is loaded.</span></div>
+      </div>
+      <div class="card capability-card">
+        <div class="cardhead"><span>PROVIDER & MODALITY SELF-INSPECTION</span><button id="capability-refresh" type="button">Refresh capabilities</button></div>
+        <p class="helptext">Separates features implemented by Origo from capabilities that depend on the selected model and have not yet been verified. This does not make model calls or spend provider credits.</p>
+        <pre id="capabilities-output" class="extension-result">Reading capability inventory…</pre>
+      </div>
+      <div class="card scout-card">
+        <div class="cardhead"><span>ORIGO SCOUT · SELF-TEST AGENT</span><button id="run-scout" class="btn primary" type="button">Run read-only self-test</button></div>
+        <p class="helptext">Scout probes the running app through local HTTP routes. It does not call a model, use the network, change settings, write files, or approve actions.</p>
+        <div id="scout-summary" class="diag-summary" role="status" aria-live="polite">Ready to run. No tests have run in this session.</div>
+        <div id="scout-results" class="stack"><div class="empty">The agent will show individual checks and evidence here.</div></div>
+      </div>
+      <div class="card hmi-audit-card">
+        <div class="cardhead"><span>HMI QUALITY GATE · PSYCHOLOGY & ACCESSIBILITY</span><button id="run-hmi-audit" class="btn primary" type="button">Review interface</button></div>
+        <p class="helptext">A deterministic static audit for keyboard access, reduced motion, feedback, escape routes, reminders, and manipulative interface patterns. This is a guardrail—not a usability study or WCAG certification.</p>
+        <div id="hmi-audit-summary" class="diag-summary" role="status" aria-live="polite">Ready to review the interface.</div>
+        <div id="hmi-audit-results" class="stack"><div class="empty">Run a review to inspect each heuristic and its source evidence.</div></div>
+      </div>
+      <div class="card">
+        <div class="cardhead"><span>WORKSTATION CHECKS</span><button id="diagrefresh" type="button">Run checks</button></div>
+        <div id="diagsummary" class="diag-summary">Waiting for first check…</div>
+        <div id="diagnostics" class="stack"><div class="empty">Waiting for diagnostics…</div></div>
+      </div>
+      <div class="card provenance-card">
+        <div class="cardhead"><span>ORIGO CAPSULE · REPRODUCIBILITY & INTEGRITY</span><button id="refresh-capsules" class="btn" type="button">Refresh Capsules</button></div>
+        <p class="helptext">Create a signed, passive research snapshot. Only the workspace-relative files you explicitly list are included; prompts, binary attachments, secrets, runtime databases, and unselected files are excluded. Verification checks hashes/signature and never executes archived code.</p>
+        <div class="form-grid">
+          <div class="formrow"><label for="capsule-run-id">Optional run ID</label><input id="capsule-run-id" maxlength="64" autocomplete="off" placeholder="e.g. run identifier from history"></div>
+          <div class="formrow"><label for="capsule-paths">Workspace files to include</label><textarea id="capsule-paths" rows="2" maxlength="6000" placeholder="results.csv, report.md, src/experiment.py"></textarea><small class="helptext">Comma- or newline-separated paths. Leave blank for metadata-only Capsule.</small></div>
+        </div>
+        <div class="smoke-toolbar"><button id="create-capsule" class="btn primary" type="button">Create signed Capsule</button><span id="capsule-summary" role="status" aria-live="polite">No Capsule created in this session.</span></div>
+        <div id="capsule-results" class="stack"><div class="empty">Capsules will appear here with signature and integrity results.</div></div>
+      </div>
+      <div class="card provenance-card">
+        <div class="cardhead"><span>PROOF LEDGER · EVIDENCE-LINKED CLAIMS</span><button id="refresh-proof-ledger" class="btn" type="button">Refresh ledger</button></div>
+        <p class="helptext">Register an exact excerpt from a local text file, link a claim to it, and run a preflight claim lint. Numeric matching is only lexical; prose claims still require your substantive review. This prototype does not automatically find every factual claim in an entire document, and the preflight is not yet wired into every exporter.</p>
+        <div class="form-grid">
+          <div class="formrow"><label for="proof-evidence-path">Evidence file (workspace-relative)</label><input id="proof-evidence-path" maxlength="2048" placeholder="results.md"></div>
+          <div class="formrow"><label for="proof-evidence-excerpt">Exact evidence excerpt</label><textarea id="proof-evidence-excerpt" rows="3" maxlength="3000" placeholder="Paste an exact line or excerpt from that file"></textarea></div>
+          <div class="formrow"><label for="proof-evidence-note">Evidence note (optional)</label><input id="proof-evidence-note" maxlength="500" placeholder="Which result / section does this support?"></div>
+        </div>
+        <div class="smoke-toolbar"><button id="add-proof-evidence" class="btn" type="button">Register evidence excerpt</button><span id="proof-evidence-summary" role="status" aria-live="polite">No evidence registered in this session.</span></div>
+        <div class="form-grid">
+          <div class="formrow"><label for="proof-claim-statement">Claim to review</label><textarea id="proof-claim-statement" rows="2" maxlength="3000" placeholder="The measured result was …"></textarea></div>
+          <div class="formrow"><label for="proof-claim-evidence-ids">Evidence IDs (comma-separated)</label><input id="proof-claim-evidence-ids" maxlength="2000" placeholder="Filled when you register evidence"></div>
+          <div class="formrow"><label for="proof-lint-text">Draft text to check</label><textarea id="proof-lint-text" rows="3" maxlength="100000" placeholder="Paste the draft containing the exact claim text"></textarea></div>
+        </div>
+        <div class="smoke-toolbar"><button id="add-proof-claim" class="btn" type="button">Register claim</button><button id="lint-proof-text" class="btn primary" type="button">Lint draft</button><span id="proof-lint-summary" role="status" aria-live="polite">Unreviewed claims should remain flagged.</span></div>
+        <div class="formrow"><label for="proof-review-claim-id">Claim ID for manual review</label><input id="proof-review-claim-id" maxlength="64" placeholder="Claim ID from ledger"><small class="helptext">Manual review is blocked for missing, mismatched, or stale evidence. Human review is an attestation, not proof of truth.</small></div>
+        <div class="smoke-toolbar"><button id="review-proof-claim" class="btn" type="button">Mark reviewed by me</button></div>
+        <div id="proof-ledger-summary" class="diag-summary" role="status" aria-live="polite">Loading ledger…</div>
+        <div id="proof-ledger-results" class="stack"><div class="empty">Claims and evidence records will appear here.</div></div>
+      </div>
+      <div class="card diag-help">
+        <div class="cardhead"><span>INTEGRATION STATUS</span><span class="readonly-label">READ-ONLY</span></div>
+        <div class="help-grid">
+          <p><b>Model gateway</b><span>OpenAI-compatible <code>/v1/models</code> and <code>/v1/chat/completions</code>.</span></p>
+          <p><b>llama-swap / llama.cpp</b><span>Health and model discovery only. The harness does not start, stop or retune the server.</span></p>
+          <p><b>Qdrant</b><span>Read-only vector retrieval is optional and only enabled when you configure a collection plus an embeddings endpoint; no vector mutations.</span></p>
+          <p><b>Workbench API</b><span>OpenAPI metadata only; no business operation is invoked.</span></p>
+        </div>
+      </div>
+    </section>
+
+    <footer><span>INDRA ORIGO <i>·</i> LOCAL HARNESS 1.7.2</span><span id="footstatus">Waiting for status</span></footer>
+  </main>
+</div>
+<div id="command-palette" class="command-palette" hidden role="dialog" aria-modal="true" aria-labelledby="command-palette-title" aria-describedby="command-palette-help">
+  <div class="command-backdrop" data-command-close="true"></div>
+  <div class="command-dialog">
+    <div class="command-title-row"><div><h2 id="command-palette-title">Go anywhere. Do anything safely.</h2><p id="command-palette-help">Search actions and workspaces. External or consequential actions still use their normal approval checks.</p></div><kbd>ESC</kbd></div>
+    <label class="sr-only" for="command-palette-search">Search commands</label>
+    <input id="command-palette-search" type="search" maxlength="100" autocomplete="off" placeholder="Search commands…">
+    <div id="command-palette-list" class="command-list" role="listbox" aria-label="Available commands"></div>
+    <div class="command-footer"><span><kbd>↑</kbd> <kbd>↓</kbd> navigate</span><span><kbd>Enter</kbd> run selected action</span><span>Actions require your intent</span></div>
+  </div>
+</div>
+
+<div id="permission-modal" class="permission-modal" hidden role="dialog" aria-modal="true" aria-labelledby="permission-title" aria-describedby="permission-summary-text">
+  <div class="permission-backdrop"></div>
+  <div class="permission-dialog">
+    <div class="permission-modal-mark" aria-hidden="true">◇</div>
+    <div class="permission-eyebrow" id="permission-kind-label">ACTION REQUEST</div>
+    <h2 id="permission-title">Indra needs your approval</h2>
+    <p id="permission-summary-text" class="permission-summary-text"></p>
+    <pre id="permission-detail-text" class="permission-detail-text"></pre>
+    <p class="permission-risk-note">Review the request carefully. Approving this action does not approve any later action. Untrusted page and plugin content never overrides these permissions.</p>
+    <div class="permission-modal-actions"><button id="permission-deny" class="btn danger" type="button">Deny</button><button id="permission-domain" class="btn" type="button" hidden>Allow host this session</button><button id="permission-approve" class="btn primary" type="button">Approve once</button></div>
+    <small id="permission-expiry" class="permission-expiry">This request expires automatically.</small>
+  </div>
+</div>
+
+<aside id="ori-companion" class="ori-companion" aria-label="Ori companion">
+  <div id="ori-bubble" class="ori-bubble" hidden>
+    <div class="ori-bubble-head"><b id="ori-bubble-title">A small pause?</b><button id="ori-close" type="button" aria-label="Close Ori message">×</button></div>
+    <p id="ori-bubble-text">You have been focused for a while. A little reset can help.</p>
+    <div class="ori-actions"><button id="ori-talk" type="button">Talk to Ori</button><button id="ori-break" type="button">Take a break</button><button id="ori-later" type="button">Later</button></div>
+    <label class="ori-reminder-toggle"><input id="ori-reminders" type="checkbox" checked> Gentle break nudges every 50 active minutes</label>
+  </div>
+  <button id="ori-open" class="ori-open" type="button" aria-label="Open Ori companion" aria-expanded="false" title="Talk with Ori">
+    <span class="ori-orbit" aria-hidden="true"></span>
+    <span class="ori-avatar" aria-hidden="true"><span class="ori-ear ori-ear-left"></span><span class="ori-ear ori-ear-right"></span><span class="ori-face"><i class="ori-eye ori-eye-left"></i><i class="ori-eye ori-eye-right"></i><i class="ori-mouth"></i></span><span class="ori-cheek ori-cheek-left"></span><span class="ori-cheek ori-cheek-right"></span></span>
+    <span class="ori-online-dot" aria-hidden="true"></span>
+  </button>
+  <span class="ori-label">ORI · COMPANION</span>
+</aside>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="/assets/app.js" defer></script>
+</body>
+</html>
