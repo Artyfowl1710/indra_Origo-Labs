@@ -72,7 +72,7 @@ python-multipart==0.0.33
 python-pptx==1.0.2
 python-telegram-bot==22.8
 pytz==2026.6
-pywin32==311
+pywin32==312
 pywinpty==2.0.15
 PyYAML==6.0.3
 referencing==0.37.0
