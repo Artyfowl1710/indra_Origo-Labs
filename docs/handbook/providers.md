@@ -21,7 +21,7 @@ The optional managed llama.cpp router needs its runtime directory, model weights
 
 ## Self-hosted vLLM with signed model releases
 
-Use the local or custom OpenAI-compatible provider at `http://127.0.0.1:8100/v1`. Select the model name recorded in the approved manifest and enter the server's API key. This optional launcher runs on Linux, including a WSL installation where vLLM can use the GPU. Bundle verification also works on Windows. Install a vetted vLLM release and this repository's `cryptography` dependency in a dedicated Python environment. The launcher keeps the server on loopback.
+Use the local or custom OpenAI-compatible provider at `http://127.0.0.1:8100/v1`. Select the model name recorded in the approved manifest and enter the server's API key. This optional launcher runs on Linux, including a WSL installation where vLLM can use the GPU. Bundle verification also works on Windows. Install a vetted vLLM release and this repository's `cryptography` dependency in a dedicated Python environment. A minimal Linux or WSL image may also need a C compiler and matching Python development headers for Triton's GPU kernels. The launcher keeps the server on loopback.
 
 Stage a complete local model snapshot with safetensors weights, configuration, tokenizer and any chat template. Use a clean directory with regular files and no links. On the release workstation, generate and review an exact inventory, then sign its bytes with the release authority's Ed25519 key. The following example uses OpenSSL 3. Keep all three approval files outside the model tree. Use byte-preserving redirection in a Linux shell for manifest generation.
 

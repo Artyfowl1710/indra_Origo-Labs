@@ -6,6 +6,7 @@ import sqlite3
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 import unittest
 from unittest.mock import patch
@@ -74,6 +75,30 @@ class WorkspaceProductTests(unittest.TestCase):
         third=self.wait_job(self.service.index(project));self.assertEqual(third["done"],1)
         source.unlink();self.wait_job(self.service.index(project))
         self.assertEqual(self.service.engine(project).list_documents(),[])
+
+    def test_index_stays_active_until_audit_event_is_committed(self):
+        project = self.service.grant("", str(self.project))
+        ready = threading.Event()
+        release = threading.Event()
+        append = self.service.audit.append
+
+        def wait_to_append(kind, payload):
+            ready.set()
+            if not release.wait(10):
+                raise TimeoutError("Test did not release the audit writer")
+            return append(kind, payload)
+
+        with patch.object(self.service.audit, "append", side_effect=wait_to_append):
+            job = self.service.index(project)
+            try:
+                self.assertTrue(ready.wait(10))
+                state_during_audit = self.service.jobs[job["id"]]["state"]
+            finally:
+                release.set()
+                final = self.wait_job(job)
+        self.assertEqual(state_during_audit, "indexing")
+        self.assertEqual(final["state"], "complete")
+        self.assertEqual(self.service.audit.recent(1)[0]["kind"], "knowledge.indexed")
 
     def test_profile_identity_isolated_unless_both_opt_in(self):
         other=Workspace(self.root/"other-profile")

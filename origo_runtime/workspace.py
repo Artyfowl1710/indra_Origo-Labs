@@ -186,8 +186,8 @@ class Workspace:
                             if old["path"] not in seen:
                                 engine.delete_document(old["doc_id"])
                                 db.execute("DELETE FROM indexed WHERE project=? AND path=?",(project,old["path"]))
-                state["state"]="complete"
                 self.audit.append("knowledge.indexed", {k:state[k] for k in ("project","done","skipped","errors","total")})
+                state["state"]="complete"
             except Exception as exc: state.update(state="failed",error=type(exc).__name__)
         _workers.submit(work)
         return dict(self.jobs[job])

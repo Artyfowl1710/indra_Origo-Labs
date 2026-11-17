@@ -18,7 +18,7 @@ class VerifiedVllmTests(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
-        self.root = Path(temporary.name)
+        self.root = Path(temporary.name).resolve(strict=True)
         self.model_dir = self.root / "model"
         self.model_dir.mkdir()
         (self.model_dir / "config.json").write_text("{}", encoding="utf-8")
