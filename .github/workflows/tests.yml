@@ -23,7 +23,12 @@ jobs:
         with:
           node-version: '22'
       - name: Isolate generated test state
-        run: '"INDRA_DATA_DIR=$env:RUNNER_TEMP\indra-regression-state" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append'
+        run: |
+          $temp = Join-Path $env:RUNNER_TEMP 'indra-test-temp'
+          New-Item -ItemType Directory -Path $temp -Force | Out-Null
+          "TEMP=$temp" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "TMP=$temp" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "INDRA_DATA_DIR=$env:RUNNER_TEMP\indra-regression-state" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
       - name: Install pinned dependencies
         run: python -m pip install -r requirements-release.lock.txt
       - name: Compile Python
