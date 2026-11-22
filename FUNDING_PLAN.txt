@@ -1,0 +1,39 @@
+INDRA RELEASE VALIDATION FUNDING PLAN
+22 November 2026
+
+Requested: INR 150,000, once.
+Applicant: Mihir Khatri, India, individual maintainer.
+Origo Labs is a project name, not a registered company.
+
+Proposed 12-week effort, starting after funding and schedule agreement. Budget: INR
+120,000 for 240 hours of maintainer work at INR 500/hour; INR 18,000 for temporary
+GPU/model-server test access; INR 12,000 for access to additional Windows test
+environments and packaging validation. Expenses are planning allowances, not vendor
+quotes. Weeks 1-4: test the existing installer with fresh profiles on at least two
+additional Windows PCs, record prerequisites and startup failures, fix reproducible
+issues, and publish sanitized results. Weeks 5-8: exercise one documented llama.cpp
+configuration and one Linux/WSL vLLM configuration through Indra's OpenAI-compatible
+connection, record exact runtime/model/hardware versions, and add regressions for
+confirmed failures. Weeks 9-12: publish repeatable timing, memory and successful-output-
+throughput measurements with scripts and raw synthetic-input results; exercise the
+existing signed-model launcher against a real small local bundle, including altered-file
+rejection; update installation and troubleshooting docs and prepare a tested release
+candidate. Energy claims will be made only if suitable measurement equipment is
+available. Request-level receipts, hardware attestation and compliance certification are
+outside this request. Code, documentation and test material produced for the effort will
+be public under appropriate open licenses, preserving upstream attribution. Publish
+progress against these milestones. This is one funding need: other grants or
+sponsorships for overlapping work would be disclosed and the budget reduced to avoid
+double funding.
+
+The schedule assumes roughly 20 hours each week for 12 weeks.
+
+Indra is at the Windows release-candidate stage. External adoption has not been
+measured. The integration is MIT-licensed and incorporates the Hermes agent
+framework from Nous Research, with original notices retained. AI tools have
+assisted development, documentation and this funding application. No project
+grants, prizes, sponsorships or other funding have been received.
+
+Source: https://github.com/Artyfowl1710/indra_Origo-Labs
+Handbook: https://artyfowl1710.github.io/indra_Origo-Labs/
+Attribution: https://github.com/Artyfowl1710/indra_Origo-Labs/blob/main/NOTICE.md

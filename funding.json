@@ -1,6 +1,6 @@
 {
   "$schema": "https://fundingjson.org/schema/v1.1.0.json",
-  "version": "2026-11-22",
+  "version": "v1.0.0",
   "entity": {
     "type": "individual",
     "role": "maintainer",
@@ -25,8 +25,17 @@
         "url": "https://github.com/Artyfowl1710/indra_Origo-Labs",
         "wellKnown": "https://github.com/Artyfowl1710/indra_Origo-Labs/blob/main/.well-known/funding-manifest-urls"
       },
-      "licenses": ["spdx:MIT"],
-      "tags": ["developer-tools", "artificial-intelligence", "desktop", "windows", "privacy", "local-first"]
+      "licenses": [
+        "spdx:MIT"
+      ],
+      "tags": [
+        "developer-tools",
+        "artificial-intelligence",
+        "desktop",
+        "windows",
+        "privacy",
+        "local-first"
+      ]
     }
   ],
   "funding": {
@@ -42,11 +51,13 @@
         "guid": "release-validation-12-weeks",
         "status": "active",
         "name": "Indra release validation and local model compatibility",
-        "description": "Proposed 12-week effort, starting after funding and schedule agreement. Budget: INR 120,000 for 240 hours of maintainer work at INR 500/hour; INR 18,000 for temporary GPU/model-server test access; INR 12,000 for access to additional Windows test environments and packaging validation. Expenses are planning allowances, not vendor quotes. Weeks 1-4: test the existing installer with fresh profiles on at least two additional Windows PCs, record prerequisites and startup failures, fix reproducible issues, and publish sanitized results. Weeks 5-8: exercise one documented llama.cpp configuration and one Linux/WSL vLLM configuration through Indra's OpenAI-compatible connection, record exact runtime/model/hardware versions, and add regressions for confirmed failures. Weeks 9-12: publish repeatable timing, memory and successful-output-throughput measurements with scripts and raw synthetic-input results; exercise the existing signed-model launcher against a real small local bundle, including altered-file rejection; update installation and troubleshooting docs and prepare a tested release candidate. Energy claims will be made only if suitable measurement equipment is available. Request-level receipts, hardware attestation and compliance certification are outside this request. Code, documentation and test material produced for the effort will be public under appropriate open licenses, preserving upstream attribution. Publish progress against these milestones. This is one funding need: other grants or sponsorships for overlapping work would be disclosed and the budget reduced to avoid double funding.",
+        "description": "12-week release-validation effort: INR 120,000 for 240 maintainer hours at INR 500/hour, INR 18,000 for GPU/server test access and INR 12,000 for additional Windows test access. Test installation on two more PCs, document llama.cpp/vLLM compatibility, publish reproducible benchmarks and validate real signed model bundles. Start after schedule agreement. Scope, milestones and no-double-funding terms: https://github.com/Artyfowl1710/indra_Origo-Labs/blob/main/FUNDING_PLAN.txt",
         "amount": 150000,
         "currency": "INR",
         "frequency": "one-time",
-        "channels": ["contact-maintainer"]
+        "channels": [
+          "contact-maintainer"
+        ]
       }
     ],
     "history": [
