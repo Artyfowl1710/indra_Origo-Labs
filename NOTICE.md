@@ -1,6 +1,8 @@
 # Attribution and third-party notices
 
-Indra product integration, presentation and new work: Origo Labs, 2026. The source includes pre-existing SIH/Indra_lok work by its original contributors and the Hermes agent framework by Nous Research. Copyright notices and licenses in imported files continue to apply. Product branding does not replace authorship or license obligations.
+Indra's product integration and new work are released under the [MIT license](LICENSE), with copyright held by Mihir Harshad Khatri and Origo Labs contributors, 2026. Imported components retain their original copyright notices and licenses.
+
+The repository includes earlier SIH/Indra_lok work by its original contributors and the Hermes agent framework by Nous Research. Their notices remain in the imported source.
 
 The imported foundation's [MIT license](indra/SIH-26/hermes-agent/LICENSE) is retained. Additional third-party assets and packages carry their own notices. Electron includes Chromium notices in the binary distribution; Python and Node licenses are included in runtime releases. Python packages retain their dist-info licenses. The compact MiniLM model is distributed separately from Git with its upstream license and provenance when bundled. See the runtime dependency manifest for exact versions.
 
