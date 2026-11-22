@@ -1,65 +1,68 @@
 # Indra · Origo Labs
 
-**An agent workstation that turns a project goal into inspectable work: files, tests, approval decisions and a verifiable handoff.**
+Indra is an open-source AI workstation for Windows. Choose a model, give it access to a project folder, and inspect its proposed actions, changed files, test results and audit records.
 
-Built on an existing local-first SIH agent foundation. This submission focuses on the desktop workbench, scoped project/knowledge workflow, model routing, verifiable goal completion and phone control developed and refined during the hackathon. [What is new, what is inherited](HACKATHON.md).
+The desktop and knowledge index run locally. You can connect a hosted model provider or a compatible local inference server. The Indra integration is MIT-licensed. Imported components retain their original licenses and attribution.
 
-<p align="center"><img src="docs/media/indra-city-hero.gif" alt="Indra city animation — Origo Labs" width="100%"></p>
+[Download for Windows](https://github.com/Artyfowl1710/indra_Origo-Labs/releases/tag/v1.8.0-rc.1) · [Handbook](https://Artyfowl1710.github.io/indra_Origo-Labs/) · [Contribute](CONTRIBUTING.md) · [Security](SECURITY.md) · [License](LICENSE)
 
-<p align="center"><strong>Give it a project. Set the goal. Inspect the work.</strong></p>
+![Indra Projects view](docs/media/projects.webp)
 
-[Download Windows release candidate](https://github.com/Artyfowl1710/indra_Origo-Labs/releases/tag/v1.8.0-rc.1) · [User handbook](docs/handbook/index.md) · [Documentation website](https://Artyfowl1710.github.io/indra_Origo-Labs/) · [Evidence gallery](docs/handbook/evidence.md) · [Security](SECURITY.md)
+Projects view captured from an isolated workbench with fictional demo data. See the [gallery](docs/handbook/evidence.md) for the scope of each recording and screenshot.
 
-Release links and the website become available after the maintainer publishes this prepared package. This is a **Windows x64 release candidate**, with independent testing on another PC still required.
+## Try it
 
-## Watch the work, then inspect it
+The current release is **1.8.0-rc.1 for Windows x64**. Validation on a separate Windows PC is still pending. Offline knowledge retrieval requires the [Microsoft Visual C++ v14 x64 runtime](https://aka.ms/vc14/vc_redist.x64.exe).
 
-[![Watch the three-minute real-footage demo](docs/media/formal-video-poster.jpg)](https://github.com/Artyfowl1710/indra_Origo-Labs/releases/download/v1.8.0-rc.1/Indra-real-footage-3min.mp4)
+1. Download `Indra-Setup-1.8.0-rc.1.exe` and `SHA256SUMS.txt` from the release above. Verify the hash before running the installer. The candidate installer is unsigned.
+2. Install for your Windows account and open Indra. Python, Node and the desktop runtime are bundled.
+3. In **Keys** and **Models**, configure your provider and choose a model. For local inference, start a compatible server with separately downloaded weights and configure its endpoint. See [providers](docs/handbook/providers.md).
+4. Copy [the checkout example](examples/atlas-checkout) into a writable folder. Select it in **Chat → Projects**, then follow the [guided example](docs/handbook/judges.md).
 
-**One three-minute film for the submission and X.** Actual desktop, Telegram and Docker recordings, with a separate synthetic English narrator, original electronic score and captions. It opens on the actual animated Indra front page. Meta Muse Spark Open through Baseten investigates a fictional checkout project, fixes boundary/rounding bugs, adds regression tests, produces deliverables and records activity. The phone task is separate; its generated-program execution was not validated. The recorded Docker terminal mode mounts the selected project. No slide scenes, held screenshot scenes or simulated model answers. [Earlier 75-second teaser](https://github.com/Artyfowl1710/indra_Origo-Labs/releases/download/v1.8.0-rc.1/Indra-X-Launch-Trailer-75s.mp4).
+Hosted inference and online connectors require internet access. Provider credentials, messaging accounts and large local model weights are supplied by the user. See [installation](docs/handbook/installation.md) for prerequisites and profile locations.
 
-| Workflow | Inspect in this repository |
+## Workflows
+
+| Task | Guide |
 | --- | --- |
-| Give the agent a scoped folder and a measurable goal | [Projects and goals](docs/handbook/projects.md) |
-| Retrieve document evidence before editing | [Knowledge and retrieval](docs/handbook/knowledge.md) |
-| Choose API/local models and modality roles | [Providers and routing](docs/handbook/providers.md) |
-| Review generated documents and test evidence | [Recorded outputs](examples/recorded-run/README.md) |
-| Check which model did what | [Audit and provenance](docs/handbook/audit.md) |
-| Continue through your own phone account | [Telegram and WhatsApp](docs/handbook/phone.md) |
-| Use voice and light, teal or ember appearance | [Voice and appearance](docs/handbook/voice.md) |
+| Grant a project folder and review actions | [Projects and approvals](docs/handbook/projects.md) |
+| Search local documents and inspect retrieved sources | [Knowledge and retrieval](docs/handbook/knowledge.md) |
+| Connect hosted models, Ollama, llama.cpp or vLLM | [Providers](docs/handbook/providers.md) |
+| Inspect model attribution and signed event records | [Audit](docs/handbook/audit.md) |
+| Set up access through your own messaging account | [Telegram and WhatsApp](docs/handbook/phone.md) |
+| Configure voice and appearance | [Voice](docs/handbook/voice.md) |
 
-## Install and try it
+## Demo
 
-Windows x64 is required. Offline knowledge also needs the [Microsoft Visual C++ v14 x64 runtime](https://aka.ms/vc14/vc_redist.x64.exe) if your PC does not already have it; this prerequisite is documented in the [installation guide](docs/handbook/installation.md) and the release's `INSTALL-FIRST.txt`.
+[![Watch the three-minute demo](docs/media/formal-video-poster.jpg)](https://github.com/Artyfowl1710/indra_Origo-Labs/releases/download/v1.8.0-rc.1/Indra-real-footage-3min.mp4)
 
-1. Open the release above. Download `Indra-Setup-1.8.0-rc.1.exe` and `SHA256SUMS.txt`.
-2. Compare the SHA-256 hash before running it. The candidate installer is unsigned; inspect its source and publisher before deciding whether to run it. No antivirus exclusions are needed or supplied.
-3. Install for your Windows account and open **Indra**. The installer bundles Python, Node and the desktop runtime; no separate browser or developer server is required.
-4. In **Keys**, add your own provider credential. In **Models**, choose your provider and model. For the recorded hackathon workflow, select Baseten and `meta-models/muse-spark-open-1026`.
-5. In **Chat → Projects**, select a copy of [the demo project](examples/atlas-checkout). Follow [the judge walkthrough](docs/handbook/judges.md).
+The recording follows a fictional checkout task using Baseten and `meta-models/muse-spark-open-1026`, with desktop, Telegram and Docker footage. Narration is synthetic, and the video is edited. Execution of the separate phone task's generated program remains unverified. The [completed checkout source and outputs](examples/recorded-run/README.md) include an independent verifier.
 
-The desktop and knowledge index run locally. API models and online connectors require internet access. Offline inference requires a separately installed local model server and downloaded weights; they are not bundled. No credentials or personal accounts are included.
+## Contribute
+
+Installation reports from a second Windows machine, model-server compatibility reports, documentation corrections and focused bug fixes are useful places to start. Include the release or commit, reproduction steps, and relevant hardware or provider details when reporting a problem.
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for setup, test commands and pull request guidance. The [roadmap](ROADMAP.md) lists the current priorities. Report security issues through [SECURITY.md](SECURITY.md). The [handbook source](docs/handbook/index.md) is available alongside the published site.
 
 ## Source layout
 
 | Folder | Contents |
 | --- | --- |
-| `origo-desktop/` | Native desktop shell, folder picker, lifecycle and private phone setup |
+| `origo-desktop/` | Desktop shell, folder picker and process lifecycle |
 | `origo_runtime/` | Local inference routing, embeddings and runtime services |
-| `indra/SIH-26/hermes-agent/` | Imported agent foundation and current workbench implementation; internal compatibility names retained |
-| `tests/` | Product regression tests; foundation tests also remain under the imported source |
-| `docs/handbook/` | Current user/developer handbook and Pages content |
-| `docs/media/` | Curated screenshots and short real-footage clips |
-| `examples/atlas-checkout/` | Intentionally buggy fictional starting project |
-| `examples/recorded-run/` | Separate completed run and its actual generated outputs |
-| `provenance/` | Import provenance, dependency record and release checks |
+| `indra/SIH-26/hermes-agent/` | Imported agent foundation and workbench implementation |
+| `tests/` | Product regression tests |
+| `docs/handbook/` | User and developer documentation |
+| `examples/atlas-checkout/` | Fictional checkout project with intentional bugs |
+| `examples/recorded-run/` | Completed demo source and generated outputs |
+| `provenance/` | Import records, dependencies and release checks |
 
-Private `data/`, chat databases, generated runtime outputs, model weights, caches, node_modules and binaries are excluded from Git. Only the reviewed fictional outputs under `examples/recorded-run/outputs/` are deliberately published. Your files do not become public just because Indra generated them.
+Runtime profiles contain credentials and personal data. Keep them out of issues, pull requests and project archives. The public files in `examples/recorded-run/outputs/` were reviewed for publication.
 
-## Develop, verify and release
+## Development and release status
 
-See [development](docs/handbook/development.md), [testing](docs/handbook/testing.md), [architecture](docs/handbook/architecture.md), [release process](docs/handbook/release.md) and [known limits](docs/handbook/limitations.md). Test reports state their scope; a passing focused suite is not a claim that every optional connector has been tested.
+See [development](docs/handbook/development.md), [testing](docs/handbook/testing.md), [architecture](docs/handbook/architecture.md) and [release checks](docs/handbook/release.md). The packaged release targets Windows x64. Optional integrations have separate dependencies and validation requirements. [Known limits](docs/handbook/limitations.md) records the remaining release work and the scope of existing evidence.
 
 ## Lineage and licensing
 
-Indra is a product by **Origo Labs**. The earlier [Indra_lok](https://github.com/Artyfowl1710/Indra_lok) project and the MIT-licensed Hermes agent foundation from Nous Research are part of its lineage. Existing orchestration, connector and tool capabilities are not claimed as wholly new. Original notices and internal identifiers are preserved where required for legal accuracy and compatibility. See [NOTICE](NOTICE.md), [LICENSE](LICENSE) and [the contribution boundary](HACKATHON.md).
+Indra is developed by **Origo Labs**, building on the earlier [Indra_lok](https://github.com/Artyfowl1710/Indra_lok) project and the Hermes agent framework from Nous Research. The Indra integration is released under the [MIT license](LICENSE). Imported components retain their original licenses, copyright notices and internal compatibility identifiers. See [NOTICE.md](NOTICE.md) and [the development history](HACKATHON.md) for attribution and the boundary between inherited and new work.

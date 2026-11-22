@@ -1,0 +1,38 @@
+name: Bug report
+description: Report a failure you can reproduce in Indra.
+body:
+  - type: markdown
+    attributes:
+      value: Use fictional files and remove credentials, phone sessions and private conversation data. For vulnerabilities, follow SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Indra version or commit
+      placeholder: v1.8.0-rc.1
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include your Windows version, installation method, model provider or local server, and relevant hardware.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include the smallest example that triggers the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and observed result
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Error message or test output
+      description: Remove private data before pasting logs.
