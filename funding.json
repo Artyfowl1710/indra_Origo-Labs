@@ -1,0 +1,61 @@
+{
+  "$schema": "https://fundingjson.org/schema/v1.1.0.json",
+  "version": "2026-11-22",
+  "entity": {
+    "type": "individual",
+    "role": "maintainer",
+    "name": "Mihir Khatri",
+    "email": "khatrimihir672@gmail.com",
+    "description": "I maintain Indra from India under the Origo Labs project name. Origo Labs is not a registered company. Indra brings together a Windows desktop workbench, project-scoped document retrieval, model connections and reviewable agent actions. The repository builds on the earlier Indra_lok project and the Hermes agent framework from Nous Research; their authorship and notices are retained. Development and this funding draft use generative AI assistance. The release is at an early stage, and I am seeking support for installation testing, model-server compatibility work and reproducible release evidence. Indra has not received grants, prizes, sponsorships or other funding.",
+    "webpageUrl": {
+      "url": "https://github.com/Artyfowl1710",
+      "wellKnown": "https://github.com/Artyfowl1710/indra_Origo-Labs/blob/main/.well-known/funding-manifest-urls"
+    }
+  },
+  "projects": [
+    {
+      "guid": "indra",
+      "name": "Indra",
+      "description": "Indra is an open-source AI workstation for Windows. Users connect a hosted provider or compatible local model server, choose a project folder and inspect proposed actions, changed files, test results and audit records. The desktop and document index run locally; hosted providers receive the context sent to them. The integration is MIT-licensed, and imported components retain their own notices and licenses. It builds on the Hermes agent framework from Nous Research. The current Windows x64 release is 1.8.0-rc.1. Independent installation testing and code signing remain release work. The project includes an optional launcher that verifies signed local model bundles before starting vLLM. It does not provide request-level hardware attestation or a banking compliance certification. Development uses generative AI assistance, including code and documentation. The funding request covers a defined release-validation effort. External usage has not yet been measured, and no adoption or performance figures are claimed.",
+      "webpageUrl": {
+        "url": "https://github.com/Artyfowl1710/indra_Origo-Labs",
+        "wellKnown": "https://github.com/Artyfowl1710/indra_Origo-Labs/blob/main/.well-known/funding-manifest-urls"
+      },
+      "repositoryUrl": {
+        "url": "https://github.com/Artyfowl1710/indra_Origo-Labs",
+        "wellKnown": "https://github.com/Artyfowl1710/indra_Origo-Labs/blob/main/.well-known/funding-manifest-urls"
+      },
+      "licenses": ["spdx:MIT"],
+      "tags": ["developer-tools", "artificial-intelligence", "desktop", "windows", "privacy", "local-first"]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "contact-maintainer",
+        "type": "other",
+        "description": "Contact the maintainer by email to agree a supported disbursement method and complete any required paperwork. Payment account details are not published in this manifest."
+      }
+    ],
+    "plans": [
+      {
+        "guid": "release-validation-12-weeks",
+        "status": "active",
+        "name": "Indra release validation and local model compatibility",
+        "description": "Proposed 12-week effort, starting after funding and schedule agreement. Budget: INR 120,000 for 240 hours of maintainer work at INR 500/hour; INR 18,000 for temporary GPU/model-server test access; INR 12,000 for access to additional Windows test environments and packaging validation. Expenses are planning allowances, not vendor quotes. Weeks 1-4: test the existing installer with fresh profiles on at least two additional Windows PCs, record prerequisites and startup failures, fix reproducible issues, and publish sanitized results. Weeks 5-8: exercise one documented llama.cpp configuration and one Linux/WSL vLLM configuration through Indra's OpenAI-compatible connection, record exact runtime/model/hardware versions, and add regressions for confirmed failures. Weeks 9-12: publish repeatable timing, memory and successful-output-throughput measurements with scripts and raw synthetic-input results; exercise the existing signed-model launcher against a real small local bundle, including altered-file rejection; update installation and troubleshooting docs and prepare a tested release candidate. Energy claims will be made only if suitable measurement equipment is available. Request-level receipts, hardware attestation and compliance certification are outside this request. Code, documentation and test material produced for the effort will be public under appropriate open licenses, preserving upstream attribution. Publish progress against these milestones. This is one funding need: other grants or sponsorships for overlapping work would be disclosed and the budget reduced to avoid double funding.",
+        "amount": 150000,
+        "currency": "INR",
+        "frequency": "one-time",
+        "channels": ["contact-maintainer"]
+      }
+    ],
+    "history": [
+      {
+        "year": 2026,
+        "income": 0,
+        "currency": "INR",
+        "description": "The maintainer reports no grants, prizes, sponsorships or other project funding as of 22 November 2026. Unrecorded expenses are not estimated here."
+      }
+    ]
+  }
+}
